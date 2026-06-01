@@ -1,0 +1,74 @@
+.viewer-page {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  color: var(--text-h);
+}
+
+.viewer-topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.viewer-topbar h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.viewer-workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 22vw, 360px);
+}
+
+.viewer-viewport {
+  min-width: 0;
+  min-height: 0;
+}
+
+.robot-viewport {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.robot-viewport canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viewer-status {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.save-button {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-h);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background: #e7ebf0;
+}
