@@ -1,21 +1,11 @@
 import {
-  Outlet,
   createRootRoute,
   createRoute,
   createRouter,
 } from '@tanstack/react-router'
+import { RootLayout } from './RootLayout'
 import { HomePage } from '../pages/HomePage'
 import { SpecsPage } from '../pages/SpecsPage'
-import { AppHeader } from '../ui/AppHeader'
-
-function RootLayout() {
-  return (
-    <div className="app-shell">
-      <AppHeader />
-      <Outlet />
-    </div>
-  )
-}
 
 const rootRoute = createRootRoute({
   component: RootLayout,

@@ -9,13 +9,15 @@ export function HomePage() {
   const user = useAuthStore((state) => state.user)
   const signInWithGitHub = useAuthStore((state) => state.signInWithGitHub)
   const prompt = useSpecStore((state) => state.prompt)
+  const status = useSpecStore((state) => state.status)
   const errorMessage = useSpecStore((state) => state.errorMessage)
   const setPrompt = useSpecStore((state) => state.setPrompt)
-  const generateMockSpec = useSpecStore((state) => state.generateMockSpec)
+  const generateSpec = useSpecStore((state) => state.generateSpec)
 
   const canGenerate = ready && Boolean(user)
+  const isGenerating = status === 'generating'
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (!canGenerate) {
@@ -23,9 +25,9 @@ export function HomePage() {
       return
     }
 
-    generateMockSpec()
+    const didGenerate = await generateSpec()
 
-    if (useSpecStore.getState().currentSpec) {
+    if (didGenerate) {
       void navigate({ to: '/specs/new' })
     }
   }
@@ -57,9 +59,13 @@ export function HomePage() {
             <button
               type="submit"
               className="generate-button"
-              disabled={!ready}
+              disabled={!ready || isGenerating}
             >
-              {user ? 'Generate spec' : 'Sign in to generate'}
+              {isGenerating
+                ? 'Generating...'
+                : user
+                  ? 'Generate spec'
+                  : 'Sign in to generate'}
             </button>
           </div>
         </form>

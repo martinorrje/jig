@@ -1,9 +1,12 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { generateSpecWithGemini } from './providers/gemini.ts'
 
+const productionOrigin = 'https://jig-rose.vercel.app';
+
 const allowedOrigins = new Set([
   'http://localhost:5173',
   'http://127.0.0.1:5173',
+  productionOrigin
 ])
 
 type CorsHeaders = ReturnType<typeof getCorsHeaders>
@@ -13,7 +16,7 @@ function getCorsHeaders(request: Request) {
 
   return {
     'Access-Control-Allow-Origin':
-      origin && allowedOrigins.has(origin) ? origin : 'https://your-domain.com',
+      origin && allowedOrigins.has(origin) ? origin : productionOrigin,
     'Access-Control-Allow-Headers':
       'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -37,6 +40,14 @@ Deno.serve(async (request) => {
   if (!user) {
     return json({ error: 'Authentication required' }, 401, corsHeaders)
   }
+
+  if (!isAllowedTester(user)) {
+    return json(
+        { error: 'You are not on the tester allowlist' },
+        403,
+        corsHeaders,
+    )
+    }
 
   try {
     const body = await request.json()
@@ -84,6 +95,38 @@ async function getAuthenticatedUser(request: Request) {
   }
 
   return user
+}
+
+function isAllowedTester(user: {
+  identities?: Array<{ provider: string; provider_id?: string }>
+}) {
+  const githubUserId = getGithubUserId(user)
+
+  if (!githubUserId) {
+    return false
+  }
+
+  return getAllowedGithubUserIds().has(githubUserId)
+}
+
+function getGithubUserId(user: {
+  identities?: Array<{ provider: string; provider_id?: string }>
+}) {
+  return (
+    user.identities?.find((identity) => identity.provider === 'github')
+      ?.provider_id ?? null
+  )
+}
+
+function getAllowedGithubUserIds() {
+  const value = Deno.env.get('ALLOWED_GITHUB_USER_IDS') ?? ''
+
+  return new Set(
+    value
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean),
+  )
 }
 
 function json(body: unknown, status: number, corsHeaders: CorsHeaders) {
