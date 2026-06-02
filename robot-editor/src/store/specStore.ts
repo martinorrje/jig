@@ -1,3 +1,4 @@
+import { FunctionsHttpError } from '@supabase/supabase-js'
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { HardwareSpec } from '../model/types'
@@ -54,7 +55,7 @@ export const useSpecStore = create<SpecState>((set, get) => ({
       if (error) {
         set({
           status: 'error',
-          errorMessage: error.message,
+          errorMessage: await getFunctionErrorMessage(error),
         })
         return false
       }
@@ -92,3 +93,27 @@ export const useSpecStore = create<SpecState>((set, get) => ({
     })
   },
 }))
+
+async function getFunctionErrorMessage(error: Error) {
+  if (error instanceof FunctionsHttpError) {
+    try {
+      const body = (await error.context.json()) as unknown
+
+      if (isErrorResponse(body)) {
+        return body.error
+      }
+    } catch {
+      return error.message
+    }
+  }
+
+  return error.message
+}
+
+function isErrorResponse(value: unknown): value is { error: string } {
+  return (
+    Boolean(value) &&
+    typeof value === 'object' &&
+    typeof (value as { error?: unknown }).error === 'string'
+  )
+}

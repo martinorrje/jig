@@ -1,3 +1,4 @@
+import { FunctionsHttpError } from '@supabase/supabase-js'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { HardwareSpec } from '../model/types'
 import { supabase } from '../lib/supabase'
@@ -80,5 +81,27 @@ describe('specStore', () => {
     expect(state.status).toBe('error')
     expect(state.currentSpec).toBeNull()
     expect(state.errorMessage).toBe('Authentication required')
+  })
+
+  it('shows the edge function error response body for non-2xx responses', async () => {
+    invokeFunction.mockResolvedValue({
+      data: null,
+      error: new FunctionsHttpError(
+        new Response(
+          JSON.stringify({ error: 'You are not on the tester allowlist' }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } },
+        ),
+      ),
+    })
+
+    useSpecStore.getState().setPrompt('desktop filament dryer')
+
+    const didGenerate = await useSpecStore.getState().generateSpec()
+
+    const state = useSpecStore.getState()
+    expect(didGenerate).toBe(false)
+    expect(state.status).toBe('error')
+    expect(state.currentSpec).toBeNull()
+    expect(state.errorMessage).toBe('You are not on the tester allowlist')
   })
 })
