@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+import type { FormEvent, KeyboardEvent } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '../store/authStore'
 import { useSpecStore } from '../store/specStore'
@@ -32,6 +32,15 @@ export function HomePage() {
     }
   }
 
+  function handlePromptKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return
+    }
+
+    event.preventDefault()
+    event.currentTarget.form?.requestSubmit()
+  }
+
   return (
     <main className="home-page">
       <section className="prompt-hero" aria-labelledby="prompt-title">
@@ -49,6 +58,7 @@ export function HomePage() {
             id="hardware-prompt"
             value={prompt}
             onChange={(event) => setPrompt(event.target.value)}
+            onKeyDown={handlePromptKeyDown}
             placeholder="Example: Design a low-cost desktop filament dryer for hobby 3D printing..."
             rows={7}
           />
