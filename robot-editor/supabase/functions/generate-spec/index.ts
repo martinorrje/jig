@@ -97,9 +97,16 @@ async function getAuthenticatedUser(request: Request) {
   return user
 }
 
-function isAllowedTester(user: {
-  identities?: Array<{ provider: string; provider_id?: string }>
-}) {
+type AuthIdentity = {
+  id?: string
+  provider: string
+  identity_data?: {
+    provider_id?: string
+    sub?: string
+  }
+}
+
+function isAllowedTester(user: { identities?: AuthIdentity[] }) {
   const githubUserId = getGithubUserId(user)
 
   if (!githubUserId) {
@@ -109,12 +116,16 @@ function isAllowedTester(user: {
   return getAllowedGithubUserIds().has(githubUserId)
 }
 
-function getGithubUserId(user: {
-  identities?: Array<{ provider: string; provider_id?: string }>
-}) {
+function getGithubUserId(user: { identities?: AuthIdentity[] }) {
+  const githubIdentity = user.identities?.find(
+    (identity) => identity.provider === 'github',
+  )
+
   return (
-    user.identities?.find((identity) => identity.provider === 'github')
-      ?.provider_id ?? null
+    githubIdentity?.identity_data?.provider_id ??
+    githubIdentity?.identity_data?.sub ??
+    githubIdentity?.id ??
+    null
   )
 }
 

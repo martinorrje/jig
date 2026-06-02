@@ -43,12 +43,8 @@ export async function generateSpecWithGemini(
           },
         ],
         generationConfig: {
-          responseFormat: {
-            text: {
-              mimeType: 'application/json',
-              schema: hardwareSpecSchema,
-            },
-          },
+          responseMimeType: 'application/json',
+          responseJsonSchema: hardwareSpecSchema,
         },
       }),
     },
