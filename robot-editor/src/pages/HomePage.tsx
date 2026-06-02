@@ -8,7 +8,6 @@ export function HomePage() {
   const ready = useAuthStore((state) => state.ready)
   const user = useAuthStore((state) => state.user)
   const signInWithGitHub = useAuthStore((state) => state.signInWithGitHub)
-  const signOut = useAuthStore((state) => state.signOut)
   const prompt = useSpecStore((state) => state.prompt)
   const errorMessage = useSpecStore((state) => state.errorMessage)
   const setPrompt = useSpecStore((state) => state.setPrompt)

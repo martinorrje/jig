@@ -10,7 +10,6 @@ const specSections = [
 ] as const
 
 export function SpecsPage() {
-  const prompt = useSpecStore((state) => state.prompt)
   const spec = useSpecStore((state) => state.currentSpec)
 
   if (!spec) {
