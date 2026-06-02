@@ -15,6 +15,11 @@
   background-size: 44px 44px;
 }
 
+.home-page {
+  display: flex;
+  flex-direction: column;
+}
+
 .topbar,
 .spec-header {
   display: flex;
@@ -27,11 +32,18 @@
   background: rgba(20, 20, 20, 0.92);
 }
 
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .brand-lockup,
 .account-controls {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .brand-lockup {
@@ -39,6 +51,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .brand-mark {
@@ -56,6 +69,13 @@
 .eyebrow {
   color: var(--text);
   font-size: 0.875rem;
+}
+
+.auth-status {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .auth-button,
@@ -95,6 +115,7 @@
   align-items: center;
   width: min(72rem, calc(100% - 3rem));
   margin-inline: auto;
+  padding-block: 2rem;
 }
 
 .hero-copy {
@@ -129,6 +150,7 @@
 }
 
 .prompt-panel {
+  width: 100%;
   border: 1px solid var(--border-strong);
   background: rgba(28, 28, 29, 0.92);
 }
@@ -167,6 +189,7 @@
   margin: 0;
   padding: 0.75rem 1.25rem 0;
   color: var(--danger);
+  overflow-wrap: anywhere;
 }
 
 .prompt-actions {
@@ -248,6 +271,7 @@
   line-height: 0.98;
   letter-spacing: 0;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .spec-summary {
@@ -260,6 +284,7 @@
   margin: 0;
   font-size: 1.125rem;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .spec-section {
@@ -285,6 +310,11 @@
   padding-left: 1.2rem;
   color: var(--ink-muted);
   line-height: 1.7;
+}
+
+.spec-section li {
+  padding-left: 0.15rem;
+  overflow-wrap: anywhere;
 }
 
 .spec-empty-page {
@@ -329,6 +359,11 @@
 }
 
 @media (max-width: 48rem) {
+  .home-page,
+  .spec-page {
+    background-size: 32px 32px;
+  }
+
   .topbar,
   .spec-header,
   .prompt-actions,
@@ -340,6 +375,8 @@
   .topbar,
   .spec-header {
     align-items: flex-start;
+    min-height: 0;
+    padding: 1rem;
   }
 
   .auth-button,
@@ -348,7 +385,85 @@
     width: 100%;
   }
 
+  .brand-lockup {
+    min-height: 2.75rem;
+  }
+
+  .account-controls {
+    width: 100%;
+  }
+
   .prompt-note {
     line-height: 1.5;
+  }
+
+  .prompt-hero {
+    align-items: start;
+    width: min(100% - 2rem, 36rem);
+    padding-block: 2rem 2.5rem;
+  }
+
+  .hero-copy h1,
+  .empty-state h1 {
+    max-width: 11ch;
+    font-size: clamp(2.1rem, 13vw, 3.4rem);
+    line-height: 1;
+  }
+
+  .prompt-label,
+  .prompt-panel textarea {
+    padding-inline: 1rem;
+  }
+
+  .prompt-panel textarea {
+    min-height: 12rem;
+    font-size: 1rem;
+  }
+
+  .prompt-actions {
+    padding: 0.875rem;
+  }
+
+  .spec-layout {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .spec-document {
+    padding: 1.125rem;
+  }
+
+  .spec-document-header,
+  .spec-summary,
+  .spec-section {
+    padding-block: 1.125rem;
+  }
+
+  .spec-document-header {
+    padding-top: 0;
+  }
+
+  .spec-document-header h1 {
+    max-width: 12ch;
+    font-size: clamp(1.85rem, 11vw, 3rem);
+    line-height: 1;
+  }
+
+  .spec-summary p:last-child {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .spec-section h2 {
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .spec-section ul {
+    padding-left: 1rem;
+    line-height: 1.6;
+  }
+
+  .empty-state {
+    padding: 1.25rem;
   }
 }

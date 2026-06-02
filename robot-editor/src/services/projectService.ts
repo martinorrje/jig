@@ -15,16 +15,7 @@ type GenerateSpecResponse = {
   spec: HardwareSpec
 }
 
-type ProjectRow = {
-  id: string
-  title: string
-  prompt: string
-  spec: HardwareSpec
-  created_at: string
-  updated_at: string
-}
-
-const PROJECT_SELECT = 'id,title,prompt,spec,created_at,updated_at'
+const PROJECT_STORAGE_PREFIX = 'jig.localProject.'
 
 export async function createProjectFromPrompt(prompt: string): Promise<Project> {
   const trimmedPrompt = prompt.trim()
@@ -33,74 +24,97 @@ export async function createProjectFromPrompt(prompt: string): Promise<Project> 
     throw new Error('Describe the hardware you want to specify first.')
   }
 
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-
-  if (userError || !userData.user) {
-    throw new Error('Authentication required')
-  }
-
-  const { data: generated, error: generateError } =
+  const { data, error } =
     await supabase.functions.invoke<GenerateSpecResponse>('generate-spec', {
       body: { prompt: trimmedPrompt },
     })
 
-  if (generateError) {
-    throw new Error(await getFunctionErrorMessage(generateError))
+  if (error) {
+    throw new Error(await getFunctionErrorMessage(error))
   }
 
-  if (!generated?.spec) {
+  if (!data?.spec) {
     throw new Error('No spec was returned.')
   }
 
-  const { data: project, error: insertError } = await supabase
-    .from('projects')
-    .insert({
-      owner_id: userData.user.id,
-      title: generated.spec.title,
-      prompt: trimmedPrompt,
-      spec: generated.spec,
-    })
-    .select(PROJECT_SELECT)
-    .single()
-
-  if (insertError) {
-    throw new Error(insertError.message)
+  const now = new Date().toISOString()
+  const project = {
+    id: createProjectId(),
+    title: data.spec.title,
+    prompt: trimmedPrompt,
+    spec: data.spec,
+    createdAt: now,
+    updatedAt: now,
   }
 
-  if (!project) {
-    throw new Error('No project was saved.')
-  }
+  saveLocalProject(project)
 
-  return toProject(project)
+  return project
 }
 
 export async function loadProject(projectId: string): Promise<Project> {
-  const { data: project, error } = await supabase
-    .from('projects')
-    .select(PROJECT_SELECT)
-    .eq('id', projectId)
-    .single()
-
-  if (error) {
-    throw new Error(error.message)
-  }
+  const project = readLocalProject(projectId)
 
   if (!project) {
     throw new Error('Project not found.')
   }
 
-  return toProject(project)
+  return project
 }
 
-function toProject(row: ProjectRow): Project {
-  return {
-    id: row.id,
-    title: row.title,
-    prompt: row.prompt,
-    spec: row.spec,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+function saveLocalProject(project: Project) {
+  getLocalProjectStorage().setItem(
+    `${PROJECT_STORAGE_PREFIX}${project.id}`,
+    JSON.stringify(project),
+  )
+}
+
+function readLocalProject(projectId: string) {
+  const rawProject = getLocalProjectStorage().getItem(
+    `${PROJECT_STORAGE_PREFIX}${projectId}`,
+  )
+
+  if (!rawProject) {
+    return null
   }
+
+  try {
+    const project = JSON.parse(rawProject) as unknown
+    return isProject(project) ? project : null
+  } catch {
+    return null
+  }
+}
+
+function getLocalProjectStorage() {
+  if (typeof globalThis.sessionStorage !== 'undefined') {
+    return globalThis.sessionStorage
+  }
+
+  return memoryStorage
+}
+
+const memoryStorage: Storage = (() => {
+  const values = new Map<string, string>()
+
+  return {
+    get length() {
+      return values.size
+    },
+    clear: () => values.clear(),
+    getItem: (key) => values.get(key) ?? null,
+    key: (index) => Array.from(values.keys())[index] ?? null,
+    removeItem: (key) => values.delete(key),
+    setItem: (key, value) => values.set(key, value),
+  }
+})()
+
+function createProjectId() {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID()
+  }
+
+  return `local-${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
 async function getFunctionErrorMessage(error: Error) {
@@ -117,6 +131,41 @@ async function getFunctionErrorMessage(error: Error) {
   }
 
   return error.message
+}
+
+function isProject(value: unknown): value is Project {
+  if (!value || typeof value !== 'object') return false
+
+  const project = value as Record<string, unknown>
+
+  return (
+    typeof project.id === 'string' &&
+    typeof project.title === 'string' &&
+    typeof project.prompt === 'string' &&
+    isHardwareSpec(project.spec) &&
+    typeof project.createdAt === 'string' &&
+    typeof project.updatedAt === 'string'
+  )
+}
+
+function isHardwareSpec(value: unknown): value is HardwareSpec {
+  if (!value || typeof value !== 'object') return false
+
+  const spec = value as Record<string, unknown>
+
+  return (
+    typeof spec.title === 'string' &&
+    typeof spec.summary === 'string' &&
+    isStringArray(spec.requirements) &&
+    isStringArray(spec.constraints) &&
+    isStringArray(spec.assumptions) &&
+    isStringArray(spec.risks) &&
+    isStringArray(spec.nextSteps)
+  )
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
 function isErrorResponse(value: unknown): value is { error: string } {

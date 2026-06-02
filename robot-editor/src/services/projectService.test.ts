@@ -6,19 +6,13 @@ import { createProjectFromPrompt, loadProject } from './projectService'
 
 vi.mock('../lib/supabase', () => ({
   supabase: {
-    auth: {
-      getUser: vi.fn(),
-    },
     functions: {
       invoke: vi.fn(),
     },
-    from: vi.fn(),
   },
 }))
 
-const getUser = vi.mocked(supabase.auth.getUser)
 const invokeFunction = vi.mocked(supabase.functions.invoke)
-const from = vi.mocked(supabase.from)
 
 const spec: HardwareSpec = {
   title: 'Desktop Filament Dryer',
@@ -32,81 +26,36 @@ const spec: HardwareSpec = {
 
 describe('projectService', () => {
   beforeEach(() => {
-    getUser.mockReset()
     invokeFunction.mockReset()
-    from.mockReset()
+    vi.stubGlobal('sessionStorage', createMemoryStorage())
   })
 
-  it('generates a spec and saves it as a user-owned project', async () => {
-    const insert = vi.fn()
-    const select = vi.fn()
-    const single = vi.fn().mockResolvedValue({
-      data: projectRow(),
-      error: null,
-    })
-
-    getUser.mockResolvedValue({
-      data: { user: testUser() },
-      error: null,
-    })
+  it('generates a spec and stores it as a local draft project', async () => {
     invokeFunction.mockResolvedValue({
       data: { spec },
       error: null,
     })
-    from.mockReturnValue({ insert } as never)
-    insert.mockReturnValue({ select })
-    select.mockReturnValue({ single })
 
     const project = await createProjectFromPrompt(' desktop filament dryer ')
 
     expect(invokeFunction).toHaveBeenCalledWith('generate-spec', {
       body: { prompt: 'desktop filament dryer' },
     })
-    expect(from).toHaveBeenCalledWith('projects')
-    expect(insert).toHaveBeenCalledWith({
-      owner_id: 'user-1',
-      title: spec.title,
-      prompt: 'desktop filament dryer',
-      spec,
-    })
-    expect(project).toEqual({
-      id: 'project-1',
-      title: spec.title,
-      prompt: 'desktop filament dryer',
-      spec,
-      createdAt: '2026-06-02T14:00:00Z',
-      updatedAt: '2026-06-02T14:00:00Z',
-    })
+    expect(project.title).toBe(spec.title)
+    expect(project.prompt).toBe('desktop filament dryer')
+    expect(project.spec).toEqual(spec)
+
+    const loadedProject = await loadProject(project.id)
+    expect(loadedProject).toEqual(project)
   })
 
-  it('loads one project by id', async () => {
-    const select = vi.fn()
-    const eq = vi.fn()
-    const single = vi.fn().mockResolvedValue({
-      data: projectRow(),
-      error: null,
-    })
-
-    from.mockReturnValue({ select } as never)
-    select.mockReturnValue({ eq })
-    eq.mockReturnValue({ single })
-
-    const project = await loadProject('project-1')
-
-    expect(from).toHaveBeenCalledWith('projects')
-    expect(select).toHaveBeenCalledWith(
-      'id,title,prompt,spec,created_at,updated_at',
+  it('throws when a local draft project cannot be found', async () => {
+    await expect(loadProject('missing-project')).rejects.toThrow(
+      'Project not found.',
     )
-    expect(eq).toHaveBeenCalledWith('id', 'project-1')
-    expect(project.id).toBe('project-1')
-    expect(project.spec).toEqual(spec)
   })
 
   it('surfaces edge function response errors', async () => {
-    getUser.mockResolvedValue({
-      data: { user: testUser() },
-      error: null,
-    })
     invokeFunction.mockResolvedValue({
       data: null,
       error: new FunctionsHttpError(
@@ -123,23 +72,17 @@ describe('projectService', () => {
   })
 })
 
-function testUser() {
-  return {
-    id: 'user-1',
-    app_metadata: {},
-    user_metadata: {},
-    aud: 'authenticated',
-    created_at: '2026-06-02T14:00:00Z',
-  }
-}
+function createMemoryStorage(): Storage {
+  const values = new Map<string, string>()
 
-function projectRow() {
   return {
-    id: 'project-1',
-    title: spec.title,
-    prompt: 'desktop filament dryer',
-    spec,
-    created_at: '2026-06-02T14:00:00Z',
-    updated_at: '2026-06-02T14:00:00Z',
+    get length() {
+      return values.size
+    },
+    clear: () => values.clear(),
+    getItem: (key) => values.get(key) ?? null,
+    key: (index) => Array.from(values.keys())[index] ?? null,
+    removeItem: (key) => values.delete(key),
+    setItem: (key, value) => values.set(key, value),
   }
 }
