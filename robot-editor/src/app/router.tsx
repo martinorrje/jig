@@ -19,7 +19,7 @@ const homeRoute = createRoute({
 
 const specsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/specs/new',
+  path: '/specs/$projectId',
   component: SpecsPage,
 })
 

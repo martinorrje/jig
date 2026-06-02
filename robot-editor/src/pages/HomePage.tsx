@@ -12,7 +12,7 @@ export function HomePage() {
   const status = useSpecStore((state) => state.status)
   const errorMessage = useSpecStore((state) => state.errorMessage)
   const setPrompt = useSpecStore((state) => state.setPrompt)
-  const generateSpec = useSpecStore((state) => state.generateSpec)
+  const createProject = useSpecStore((state) => state.createProject)
 
   const canGenerate = ready && Boolean(user)
   const isGenerating = status === 'generating'
@@ -25,10 +25,13 @@ export function HomePage() {
       return
     }
 
-    const didGenerate = await generateSpec()
+    const projectId = await createProject()
 
-    if (didGenerate) {
-      void navigate({ to: '/specs/new' })
+    if (projectId) {
+      void navigate({
+        to: '/specs/$projectId',
+        params: { projectId },
+      })
     }
   }
 

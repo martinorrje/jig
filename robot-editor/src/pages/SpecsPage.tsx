@@ -1,5 +1,6 @@
-import { Link } from '@tanstack/react-router'
-import { useSpecStore } from '../store/specStore'
+import { useEffect, useState } from 'react'
+import { Link, useParams } from '@tanstack/react-router'
+import { loadProject, type Project } from '../services/projectService'
 
 const specSections = [
   ['Requirements', 'requirements'],
@@ -9,18 +10,66 @@ const specSections = [
   ['Next steps', 'nextSteps'],
 ] as const
 
-export function SpecsPage() {
-  const spec = useSpecStore((state) => state.currentSpec)
+type ProjectLoadState =
+  | { projectId: string; status: 'loading' }
+  | { projectId: string; status: 'ready'; project: Project }
+  | { projectId: string; status: 'error'; message: string }
 
-  if (!spec) {
+export function SpecsPage() {
+  const { projectId } = useParams({ from: '/specs/$projectId' })
+  const [loadState, setLoadState] = useState<ProjectLoadState>({
+    projectId,
+    status: 'loading',
+  })
+
+  useEffect(() => {
+    let active = true
+
+    loadProject(projectId)
+      .then((project) => {
+        if (active) {
+          setLoadState({ projectId, status: 'ready', project })
+        }
+      })
+      .catch((error) => {
+        if (active) {
+          setLoadState({
+            projectId,
+            status: 'error',
+            message:
+              error instanceof Error ? error.message : 'Failed to load project.',
+          })
+        }
+      })
+
+    return () => {
+      active = false
+    }
+  }, [projectId])
+
+  const state: ProjectLoadState =
+    loadState.projectId === projectId
+      ? loadState
+      : { projectId, status: 'loading' }
+
+  if (state.status === 'loading') {
     return (
       <main className="spec-page spec-empty-page">
         <section className="empty-state">
-          <p className="eyebrow">No active spec</p>
-          <h1>Create a hardware spec first</h1>
-          <p>
-            Start from a prompt so the spec page has a structured brief to show.
-          </p>
+          <p className="eyebrow">Loading spec</p>
+          <h1>Loading hardware spec</h1>
+        </section>
+      </main>
+    )
+  }
+
+  if (state.status === 'error') {
+    return (
+      <main className="spec-page spec-empty-page">
+        <section className="empty-state">
+          <p className="eyebrow">Spec unavailable</p>
+          <h1>Could not load this spec</h1>
+          <p>{state.message}</p>
           <Link className="secondary-link" to="/">
             Back to prompt
           </Link>
@@ -29,10 +78,23 @@ export function SpecsPage() {
     )
   }
 
+  const { project } = state
+  const { spec } = project
+
   return (
     <main className="spec-page">
       <section className="spec-layout">
         <article className="spec-document">
+          <header className="spec-document-header">
+            <p className="eyebrow">Hardware spec</p>
+            <h1>{project.title}</h1>
+          </header>
+
+          <section className="spec-summary">
+            <p className="eyebrow">Prompt</p>
+            <p>{project.prompt}</p>
+          </section>
+
           <section className="spec-summary">
             <p className="eyebrow">Summary</p>
             <p>{spec.summary}</p>
