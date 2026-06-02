@@ -16,7 +16,7 @@
     "@tanstack/react-router": "^1.170.10",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "three": "^0.184.0",
+    "supabase": "^2.104.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -24,7 +24,6 @@
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -33,6 +32,6 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.8"
   }
 }

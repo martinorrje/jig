@@ -1,28 +1,339 @@
-.auth-panel {
+.app-shell {
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
+}
+
+.home-page,
+.spec-page {
+  flex: 1;
+  min-height: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    var(--bg);
+  background-size: 44px 44px;
+}
+
+.topbar,
+.spec-header {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 24px 0;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(20, 20, 20, 0.92);
 }
 
-.auth-status {
-  font-size: 14px;
-  color: var(--text);
+.brand-lockup,
+.account-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.auth-button {
-  font: inherit;
-  font-size: 15px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+.brand-lockup {
   color: var(--text-h);
-  background: var(--social-bg);
-  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.auth-button:disabled {
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-strong);
+  color: var(--accent);
+  font-size: 0.875rem;
+}
+
+.auth-status,
+.prompt-note,
+.eyebrow {
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.auth-button,
+.generate-button,
+.secondary-link {
+  min-height: 2.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.auth-button,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  color: var(--text-h);
+  background: var(--surface);
+}
+
+.auth-button:hover,
+.secondary-link:hover {
+  border-color: var(--accent);
+}
+
+.auth-button:disabled,
+.generate-button:disabled {
   cursor: default;
   opacity: 0.55;
+}
+
+.prompt-hero {
+  flex: 1;
+  display: grid;
+  align-items: center;
+  width: min(72rem, calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.hero-copy {
+  max-width: 56rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-copy h1,
+.empty-state h1 {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--text-h);
+  font-size: clamp(2.75rem, 8vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding-bottom: 1rem;
+}
+
+.hero-copy p:not(.eyebrow),
+.empty-state p:not(.eyebrow) {
+  max-width: 46rem;
+  margin: 1.5rem 0 0;
+  color: var(--text);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.prompt-panel {
+  border: 1px solid var(--border-strong);
+  background: rgba(28, 28, 29, 0.92);
+}
+
+.prompt-label {
+  display: block;
+  padding: 1rem 1.25rem 0;
+  color: var(--text-h);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prompt-panel textarea {
+  display: block;
+  width: 100%;
+  min-height: 11rem;
+  resize: vertical;
+  padding: 1rem 1.25rem;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-h);
+  background: transparent;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  outline: none;
+}
+
+.prompt-panel textarea::placeholder {
+  color: #6d6a64;
+}
+
+.form-error {
+  margin: 0;
+  padding: 0.75rem 1.25rem 0;
+  color: var(--danger);
+}
+
+.prompt-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.generate-button {
+  padding: 0 1.25rem;
+  color: var(--accent-ink);
+  background: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.generate-button:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.spec-page {
+  color: var(--ink);
+}
+
+.spec-header {
+  align-items: flex-start;
+  padding-block: 1rem;
+}
+
+.spec-header h1 {
+  margin: 0;
+  color: var(--text-h);
+  font-size: clamp(1.5rem, 3vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.spec-layout {
+  width: min(100%, 84rem);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.prompt-summary,
+.spec-document,
+.empty-state {
+  border: 1px solid #d7d0bf;
+  background: var(--paper);
+}
+
+.prompt-summary {
+  padding: 1.25rem;
+  color: var(--ink-muted);
+}
+
+.prompt-summary p:last-child {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.spec-document {
+  padding: clamp(1.25rem, 4vw, 3rem);
+}
+
+.spec-summary {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #d7d0bf;
+}
+
+.spec-summary p:last-child {
+  max-width: 70ch;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.spec-section {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #d7d0bf;
+}
+
+.spec-section:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.spec-section h2 {
+  margin: 0 0 0.875rem;
+  color: var(--ink);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.spec-section ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+.spec-empty-page {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.empty-state {
+  width: min(100%, 42rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+}
+
+.empty-state h1 {
+  max-width: 12ch;
+  color: var(--ink);
+}
+
+.empty-state p:not(.eyebrow) {
+  color: var(--ink-muted);
+}
+
+.empty-state .secondary-link {
+  margin-top: 1.5rem;
+  color: var(--ink);
+  background: var(--paper-muted);
+}
+
+@media (min-width: 64rem) {
+  .prompt-hero {
+    padding-top: 4rem;
+  }
+
+  .spec-layout {
+    align-items: start;
+  }
+
+  .prompt-summary {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+@media (max-width: 48rem) {
+  .topbar,
+  .spec-header,
+  .prompt-actions,
+  .account-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .topbar,
+  .spec-header {
+    align-items: flex-start;
+  }
+
+  .auth-button,
+  .generate-button,
+  .secondary-link {
+    width: 100%;
+  }
+
+  .prompt-note {
+    line-height: 1.5;
+  }
 }

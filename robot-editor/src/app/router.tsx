@@ -3,12 +3,22 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  lazyRouteComponent,
 } from '@tanstack/react-router'
 import { HomePage } from '../pages/HomePage'
+import { SpecsPage } from '../pages/SpecsPage'
+import { AppHeader } from '../ui/AppHeader'
+
+function RootLayout() {
+  return (
+    <div className="app-shell">
+      <AppHeader />
+      <Outlet />
+    </div>
+  )
+}
 
 const rootRoute = createRootRoute({
-  component: Outlet,
+  component: RootLayout,
 })
 
 const homeRoute = createRoute({
@@ -17,22 +27,15 @@ const homeRoute = createRoute({
   component: HomePage,
 })
 
-const newProjectRoute = createRoute({
+const specsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/projects/new',
-  component: lazyRouteComponent(() => import('../pages/ViewerPage'), 'ViewerPage'),
-})
-
-const savedProjectRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/projects/$projectId',
-  component: lazyRouteComponent(() => import('../pages/ViewerPage'), 'ViewerPage'),
+  path: '/specs/new',
+  component: SpecsPage,
 })
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
-  newProjectRoute,
-  savedProjectRoute,
+  specsRoute,
 ])
 
 export const router = createRouter({

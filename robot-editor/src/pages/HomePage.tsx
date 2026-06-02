@@ -1,32 +1,70 @@
-import { Link } from '@tanstack/react-router'
+import type { FormEvent } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '../store/authStore'
+import { useSpecStore } from '../store/specStore'
 
 export function HomePage() {
+  const navigate = useNavigate()
   const ready = useAuthStore((state) => state.ready)
   const user = useAuthStore((state) => state.user)
   const signInWithGitHub = useAuthStore((state) => state.signInWithGitHub)
   const signOut = useAuthStore((state) => state.signOut)
+  const prompt = useSpecStore((state) => state.prompt)
+  const errorMessage = useSpecStore((state) => state.errorMessage)
+  const setPrompt = useSpecStore((state) => state.setPrompt)
+  const generateMockSpec = useSpecStore((state) => state.generateMockSpec)
+
+  const canGenerate = ready && Boolean(user)
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (!canGenerate) {
+      void signInWithGitHub()
+      return
+    }
+
+    generateMockSpec()
+
+    if (useSpecStore.getState().currentSpec) {
+      void navigate({ to: '/specs/new' })
+    }
+  }
 
   return (
-    <main>      
-      <div className="auth-panel">
-        <span className="auth-status">
-          {!ready ? 'Checking session...' : user ? user.email : 'Editing locally'}
-        </span>
+    <main className="home-page">
+      <section className="prompt-hero" aria-labelledby="prompt-title">
+        <div className="hero-copy">
+          <p className="eyebrow">Hardware specification workspace</p>
+          <h1 id="prompt-title">What hardware do you want to specify?</h1>
+        </div>
 
-        <button
-          type="button"
-          className="auth-button"
-          onClick={user ? signOut : signInWithGitHub}
-          disabled={!ready}
-        >
-          {user ? 'Sign out' : 'Sign in with GitHub'}
-        </button>
+        <form className="prompt-panel" onSubmit={handleSubmit}>
+          <label className="prompt-label" htmlFor="hardware-prompt">
+            Hardware prompt
+          </label>
 
-        <Link className="primary-action" to="/projects/new">
-          New project
-        </Link>
-      </div>
+          <textarea
+            id="hardware-prompt"
+            value={prompt}
+            onChange={(event) => setPrompt(event.target.value)}
+            placeholder="Example: Design a low-cost desktop filament dryer for hobby 3D printing..."
+            rows={7}
+          />
+
+          {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
+
+          <div className="prompt-actions">
+            <button
+              type="submit"
+              className="generate-button"
+              disabled={!ready}
+            >
+              {user ? 'Generate spec' : 'Sign in to generate'}
+            </button>
+          </div>
+        </form>
+      </section>
     </main>
   )
 }
