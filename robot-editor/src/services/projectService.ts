@@ -1,6 +1,7 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import type { HardwareSpec } from '../model/types'
+import { isHardwareSpec } from '../../supabase/functions/_shared/hardwareSpecContract'
 
 export type Project = {
   id: string
@@ -146,26 +147,6 @@ function isProject(value: unknown): value is Project {
     typeof project.createdAt === 'string' &&
     typeof project.updatedAt === 'string'
   )
-}
-
-function isHardwareSpec(value: unknown): value is HardwareSpec {
-  if (!value || typeof value !== 'object') return false
-
-  const spec = value as Record<string, unknown>
-
-  return (
-    typeof spec.title === 'string' &&
-    typeof spec.summary === 'string' &&
-    isStringArray(spec.requirements) &&
-    isStringArray(spec.constraints) &&
-    isStringArray(spec.assumptions) &&
-    isStringArray(spec.risks) &&
-    isStringArray(spec.nextSteps)
-  )
-}
-
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string')
 }
 
 function isErrorResponse(value: unknown): value is { error: string } {

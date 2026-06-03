@@ -2,7 +2,8 @@ import {
   hardwareSpecSchema,
   isHardwareSpec,
   type HardwareSpec,
-} from '../hardwareSpecSchema.ts'
+} from '../../_shared/hardwareSpecContract.ts'
+import { buildPrompt } from '../prompt.ts'
 
 type GeminiResponse = {
   candidates?: Array<{
@@ -69,20 +70,4 @@ export async function generateSpecWithGemini(
   }
 
   return parsed
-}
-
-function buildPrompt(prompt: string) {
-  return `
-Create a practical hardware specification from the user prompt.
-
-Rules:
-- Be specific and engineering-oriented.
-- Do not invent exact dimensions, prices, certifications, or part numbers unless the prompt provides them.
-- Prefer clear assumptions over hidden guesses.
-- Keep each list item concise.
-- Return only the structured JSON object required by the schema.
-
-User prompt:
-${prompt}
-`.trim()
 }
