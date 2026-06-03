@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from '@tanstack/react-router'
 import { loadProject, type Project } from '../services/projectService'
+import { createPlanDisplaySections } from './planDisplay'
 
 const specSections = [
   ['Requirements', 'requirements'],
   ['Constraints', 'constraints'],
   ['Assumptions', 'assumptions'],
   ['Risks', 'risks'],
-  ['Next steps', 'nextSteps'],
 ] as const
 
 type ProjectLoadState =
@@ -80,6 +80,7 @@ export function SpecsPage() {
 
   const { project } = state
   const { spec } = project
+  const planSections = project.plan ? createPlanDisplaySections(project.plan) : []
 
   return (
     <main className="spec-page">
@@ -110,6 +111,29 @@ export function SpecsPage() {
               </ul>
             </section>
           ))}
+
+          {project.plan ? (
+            <section className="plan-output" aria-labelledby="plan-title">
+              <header className="plan-output-header">
+                <p className="eyebrow">Planning output</p>
+                <h2 id="plan-title">Full hardware plan</h2>
+                <p>{project.plan.review.summary}</p>
+              </header>
+
+              <div className="plan-blocks">
+                {planSections.map((section) => (
+                  <section className="plan-block" key={section.title}>
+                    <h3>{section.title}</h3>
+                    <ul>
+                      {section.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </article>
       </section>
     </main>

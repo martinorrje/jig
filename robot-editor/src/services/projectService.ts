@@ -1,19 +1,21 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
-import type { HardwareSpec } from '../model/types'
+import type { HardwarePlan, HardwareSpec } from '../model/types'
 import { isHardwareSpec } from '../../supabase/functions/_shared/hardwareSpecContract'
+import { isHardwarePlan } from '../../supabase/functions/_shared/hardwarePlanContract'
 
 export type Project = {
   id: string
   title: string
   prompt: string
   spec: HardwareSpec
+  plan?: HardwarePlan
   createdAt: string
   updatedAt: string
 }
 
 type GenerateSpecResponse = {
-  spec: HardwareSpec
+  plan: HardwarePlan
 }
 
 const PROJECT_STORAGE_PREFIX = 'jig.localProject.'
@@ -26,7 +28,7 @@ export async function createProjectFromPrompt(prompt: string): Promise<Project> 
   }
 
   const { data, error } =
-    await supabase.functions.invoke<GenerateSpecResponse>('generate-spec', {
+    await supabase.functions.invoke<GenerateSpecResponse>('generate-hardware', {
       body: { prompt: trimmedPrompt },
     })
 
@@ -34,16 +36,18 @@ export async function createProjectFromPrompt(prompt: string): Promise<Project> 
     throw new Error(await getFunctionErrorMessage(error))
   }
 
-  if (!data?.spec) {
-    throw new Error('No spec was returned.')
+  if (!data?.plan) {
+    throw new Error('No plan was returned.')
   }
 
+  const { plan } = data
   const now = new Date().toISOString()
   const project = {
     id: createProjectId(),
-    title: data.spec.title,
+    title: plan.spec.title,
     prompt: trimmedPrompt,
-    spec: data.spec,
+    spec: plan.spec,
+    plan,
     createdAt: now,
     updatedAt: now,
   }
@@ -144,6 +148,7 @@ function isProject(value: unknown): value is Project {
     typeof project.title === 'string' &&
     typeof project.prompt === 'string' &&
     isHardwareSpec(project.spec) &&
+    (project.plan === undefined || isHardwarePlan(project.plan)) &&
     typeof project.createdAt === 'string' &&
     typeof project.updatedAt === 'string'
   )

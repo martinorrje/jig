@@ -1,12 +1,13 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { generateSpecWithGemini } from './providers/gemini.ts'
+import { defaultPlanningSteps } from './planning/defaultPlanningSteps.ts'
+import { runHardwarePlanningPipeline } from './planning/runHardwarePlanningPipeline.ts'
 
-const productionOrigin = 'https://jig-rose.vercel.app';
+const productionOrigin = 'https://jig-rose.vercel.app'
 
 const allowedOrigins = new Set([
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  productionOrigin
+  productionOrigin,
 ])
 
 type CorsHeaders = ReturnType<typeof getCorsHeaders>
@@ -43,11 +44,11 @@ Deno.serve(async (request) => {
 
   if (!isAllowedTester(user)) {
     return json(
-        { error: 'You are not on the tester allowlist' },
-        403,
-        corsHeaders,
+      { error: 'You are not on the tester allowlist' },
+      403,
+      corsHeaders,
     )
-    }
+  }
 
   try {
     const body = await request.json()
@@ -57,9 +58,9 @@ Deno.serve(async (request) => {
       return json({ error: 'Prompt is required' }, 400, corsHeaders)
     }
 
-    const spec = await generateSpecWithGemini(prompt)
+    const plan = await runHardwarePlanningPipeline(prompt, defaultPlanningSteps)
 
-    return json({ spec }, 200, corsHeaders)
+    return json({ plan }, 200, corsHeaders)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return json({ error: message }, 500, corsHeaders)

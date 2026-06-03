@@ -30,7 +30,6 @@ describe('specStore', () => {
         constraints: ['Keep the enclosure suitable for desktop use.'],
         assumptions: ['The user wants hobby-scale operation.'],
         risks: ['Poor thermal control could damage filament.'],
-        nextSteps: ['Confirm target spool sizes.'],
       },
       createdAt: '2026-06-02T14:00:00Z',
       updatedAt: '2026-06-02T14:00:00Z',

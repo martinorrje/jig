@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { HardwareSpec } from '../model/types'
+import type { HardwarePlan, HardwareSpec } from '../model/types'
 import { supabase } from '../lib/supabase'
 import { createProjectFromPrompt, loadProject } from './projectService'
 
@@ -21,7 +21,44 @@ const spec: HardwareSpec = {
   constraints: ['Keep the enclosure suitable for desktop use.'],
   assumptions: ['The user wants hobby-scale operation.'],
   risks: ['Poor thermal control could damage filament.'],
-  nextSteps: ['Confirm target spool sizes.'],
+}
+
+const plan: HardwarePlan = {
+  overview: spec,
+  architecture: {
+    subsystems: [
+      {
+        id: 'controller',
+        name: 'Controller',
+        purpose: 'Control temperature and timing.',
+      },
+    ],
+  },
+  components: {
+    components: [
+      {
+        id: 'esp32',
+        name: 'ESP32 dev board',
+        role: 'controller',
+        category: 'controller',
+        interface: 'gpio',
+        voltage: '3V3',
+        beginnerConnection: 'Use a dev board with labeled headers.',
+      },
+    ],
+  },
+  connections: {
+    connections: [],
+    powerNotes: ['Use a suitable external power supply for heaters.'],
+    warnings: ['Do not drive heaters directly from GPIO.'],
+  },
+  review: {
+    summary: 'Needs thermal safety review.',
+    warnings: ['Add a thermal cutoff.'],
+    openQuestions: ['What heater power is required?'],
+    nextSteps: ['Choose a specific heater module.'],
+  },
+  spec,
 }
 
 describe('projectService', () => {
@@ -32,18 +69,19 @@ describe('projectService', () => {
 
   it('generates a spec and stores it as a local draft project', async () => {
     invokeFunction.mockResolvedValue({
-      data: { spec },
+      data: { plan },
       error: null,
     })
 
     const project = await createProjectFromPrompt(' desktop filament dryer ')
 
-    expect(invokeFunction).toHaveBeenCalledWith('generate-spec', {
+    expect(invokeFunction).toHaveBeenCalledWith('generate-hardware', {
       body: { prompt: 'desktop filament dryer' },
     })
     expect(project.title).toBe(spec.title)
     expect(project.prompt).toBe('desktop filament dryer')
     expect(project.spec).toEqual(spec)
+    expect(project.plan).toEqual(plan)
 
     const loadedProject = await loadProject(project.id)
     expect(loadedProject).toEqual(project)
