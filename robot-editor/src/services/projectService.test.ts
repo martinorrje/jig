@@ -41,6 +41,12 @@ const plan: HardwarePlan = {
         name: 'ESP32 dev board',
         role: 'controller',
         category: 'controller',
+        partRef: {
+          kind: 'catalog',
+          catalogPartId: 'esp32-devkit-v1',
+          description: '',
+          reason: '',
+        },
         interface: 'gpio',
         voltage: '3V3',
         beginnerConnection: 'Use a dev board with labeled headers.',

@@ -31,7 +31,7 @@ export function createPlanDisplaySections(
       title: 'Components',
       items: plan.components.components.map(
         (component) =>
-          `${component.name} (${component.id}): ${component.role}; ${component.category}; ${component.interface}; ${component.voltage}; ${component.beginnerConnection}`,
+          `${component.name} (${component.id}, ${formatPartRef(component.partRef)}): ${component.role}; ${component.category}; ${component.interface}; ${component.voltage}; ${component.beginnerConnection}`,
       ),
     },
     {
@@ -62,4 +62,12 @@ export function createPlanDisplaySections(
       items: plan.review.nextSteps,
     },
   ].filter((section) => section.items.length > 0)
+}
+
+function formatPartRef(partRef: HardwarePlan['components']['components'][number]['partRef']) {
+  if (partRef.kind === 'catalog') {
+    return `catalog: ${partRef.catalogPartId}`
+  }
+
+  return `unresolved: ${partRef.description}`
 }

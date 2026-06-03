@@ -14,12 +14,27 @@ export type SystemArchitecture = {
   }>
 }
 
+export type ComponentPartRef =
+  | {
+      kind: 'catalog'
+      catalogPartId: string
+      description: ''
+      reason: ''
+    }
+  | {
+      kind: 'unresolved'
+      catalogPartId: ''
+      description: string
+      reason: string
+    }
+
 export type ComponentSelection = {
   components: Array<{
     id: string
     name: string
     role: string
     category: string
+    partRef: ComponentPartRef
     interface: string
     voltage: string
     beginnerConnection: string
@@ -61,6 +76,20 @@ const stringArrayProperty = {
   type: 'array',
   items: stringProperty,
 } as const
+const partRefProperty = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    kind: {
+      type: 'string',
+      enum: ['catalog', 'unresolved'],
+    },
+    catalogPartId: stringProperty,
+    description: stringProperty,
+    reason: stringProperty,
+  },
+  required: ['kind', 'catalogPartId', 'description', 'reason'],
+} as const
 
 export const productOverviewSchema = hardwareSpecSchema
 
@@ -99,6 +128,7 @@ export const componentSelectionSchema = {
           name: stringProperty,
           role: stringProperty,
           category: stringProperty,
+          partRef: partRefProperty,
           interface: stringProperty,
           voltage: stringProperty,
           beginnerConnection: stringProperty,
@@ -108,6 +138,7 @@ export const componentSelectionSchema = {
           'name',
           'role',
           'category',
+          'partRef',
           'interface',
           'voltage',
           'beginnerConnection',
@@ -258,10 +289,44 @@ function isComponentCandidate(value: unknown) {
     typeof component.name === 'string' &&
     typeof component.role === 'string' &&
     typeof component.category === 'string' &&
+    isComponentPartRef(component.partRef) &&
     typeof component.interface === 'string' &&
     typeof component.voltage === 'string' &&
     typeof component.beginnerConnection === 'string'
   )
+}
+
+function isComponentPartRef(value: unknown): value is ComponentPartRef {
+  if (!value || typeof value !== 'object') return false
+
+  const partRef = value as Record<string, unknown>
+
+  if (
+    typeof partRef.kind !== 'string' ||
+    typeof partRef.catalogPartId !== 'string' ||
+    typeof partRef.description !== 'string' ||
+    typeof partRef.reason !== 'string'
+  ) {
+    return false
+  }
+
+  if (partRef.kind === 'catalog') {
+    return (
+      partRef.catalogPartId.trim().length > 0 &&
+      partRef.description === '' &&
+      partRef.reason === ''
+    )
+  }
+
+  if (partRef.kind === 'unresolved') {
+    return (
+      partRef.catalogPartId === '' &&
+      partRef.description.trim().length > 0 &&
+      partRef.reason.trim().length > 0
+    )
+  }
+
+  return false
 }
 
 function isConnection(value: unknown) {

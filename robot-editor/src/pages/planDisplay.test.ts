@@ -27,6 +27,12 @@ const plan: HardwarePlan = {
         name: 'ESP32 dev board',
         role: 'controller',
         category: 'controller',
+        partRef: {
+          kind: 'catalog',
+          catalogPartId: 'esp32-devkit-v1',
+          description: '',
+          reason: '',
+        },
         interface: 'gpio',
         voltage: '3V3',
         beginnerConnection: 'Use a dev board with labeled headers.',
@@ -85,7 +91,7 @@ describe('createPlanDisplaySections', () => {
       {
         title: 'Components',
         items: [
-          'ESP32 dev board (esp32): controller; controller; gpio; 3V3; Use a dev board with labeled headers.',
+          'ESP32 dev board (esp32, catalog: esp32-devkit-v1): controller; controller; gpio; 3V3; Use a dev board with labeled headers.',
         ],
       },
       {
