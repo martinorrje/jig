@@ -1,12 +1,17 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
-import { defaultPlanningSteps } from './planning/defaultPlanningSteps.ts'
-import { runHardwarePlanningPipeline } from './planning/runHardwarePlanningPipeline.ts'
+import { isHardwarePlan } from '../_shared/hardwarePlanContract.ts'
+import { generateHousingCad } from './cad/generateHousingCad.ts'
+import { generateHardwarePlan } from './planning/generateHardwarePlan.ts'
 
 const productionOrigin = 'https://jig-rose.vercel.app'
 
 const allowedOrigins = new Set([
   'http://localhost:5173',
+  'http://localhost:5175',
+  'http://localhost:5176',
   'http://127.0.0.1:5173',
+  'http://127.0.0.1:5175',
+  'http://127.0.0.1:5176',
   productionOrigin,
 ])
 
@@ -53,12 +58,22 @@ Deno.serve(async (request) => {
   try {
     const body = await request.json()
     const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : ''
+    const mode = body.mode === 'cad' ? 'cad' : 'plan'
 
     if (!prompt) {
       return json({ error: 'Prompt is required' }, 400, corsHeaders)
     }
 
-    const plan = await runHardwarePlanningPipeline(prompt, defaultPlanningSteps)
+    if (mode === 'cad') {
+      if (!isHardwarePlan(body.plan)) {
+        return json({ error: 'Plan is required' }, 400, corsHeaders)
+      }
+
+      const cad = await generateHousingCad(prompt, body.plan)
+      return json({ cad }, 200, corsHeaders)
+    }
+
+    const plan = await generateHardwarePlan(prompt)
 
     return json({ plan }, 200, corsHeaders)
   } catch (error) {

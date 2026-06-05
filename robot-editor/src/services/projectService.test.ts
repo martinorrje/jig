@@ -2,7 +2,11 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { HardwarePlan, HardwareSpec } from '../model/types'
 import { supabase } from '../lib/supabase'
-import { createProjectFromPrompt, loadProject } from './projectService'
+import {
+  createProjectFromPrompt,
+  generateCadForProject,
+  loadProject,
+} from './projectService'
 
 vi.mock('../lib/supabase', () => ({
   supabase: {
@@ -82,15 +86,61 @@ describe('projectService', () => {
     const project = await createProjectFromPrompt(' desktop filament dryer ')
 
     expect(invokeFunction).toHaveBeenCalledWith('generate-hardware', {
-      body: { prompt: 'desktop filament dryer' },
+      body: { mode: 'plan', prompt: 'desktop filament dryer' },
     })
     expect(project.title).toBe(spec.title)
     expect(project.prompt).toBe('desktop filament dryer')
     expect(project.spec).toEqual(spec)
     expect(project.plan).toEqual(plan)
+    expect(project.cad).toEqual({ status: 'loading' })
 
     const loadedProject = await loadProject(project.id)
     expect(loadedProject).toEqual(project)
+  })
+
+  it('generates CAD for a stored project and updates the local draft', async () => {
+    invokeFunction
+      .mockResolvedValueOnce({
+        data: { plan },
+        error: null,
+      })
+      .mockResolvedValueOnce({
+        data: {
+          cad: {
+            status: 'succeeded',
+            build123dCode: 'shell = Box(1, 1, 1)',
+            workerResult: {
+              storage: {
+                step: { bucket: 'cad-artifacts', path: 'cad/project/shell.step' },
+                stl: { bucket: 'cad-artifacts', path: 'cad/project/shell.stl' },
+              },
+            },
+          },
+        },
+        error: null,
+      })
+
+    const project = await createProjectFromPrompt('desktop filament dryer')
+    const updatedProject = await generateCadForProject(project.id)
+
+    expect(invokeFunction).toHaveBeenLastCalledWith('generate-hardware', {
+      body: {
+        mode: 'cad',
+        prompt: 'desktop filament dryer',
+        plan,
+      },
+    })
+    expect(updatedProject.cad).toEqual({
+      status: 'ready',
+      build123dCode: 'shell = Box(1, 1, 1)',
+      workerResult: {
+        storage: {
+          step: { bucket: 'cad-artifacts', path: 'cad/project/shell.step' },
+          stl: { bucket: 'cad-artifacts', path: 'cad/project/shell.stl' },
+        },
+      },
+    })
+    await expect(loadProject(project.id)).resolves.toEqual(updatedProject)
   })
 
   it('throws when a local draft project cannot be found', async () => {

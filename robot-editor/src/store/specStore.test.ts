@@ -4,6 +4,7 @@ import { useSpecStore } from './specStore'
 
 vi.mock('../services/projectService', () => ({
   createProjectFromPrompt: vi.fn(),
+  generateCadForProject: vi.fn(),
 }))
 
 const createProject = vi.mocked(createProjectFromPrompt)

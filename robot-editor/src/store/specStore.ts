@@ -1,5 +1,8 @@
 import { create } from 'zustand'
-import { createProjectFromPrompt } from '../services/projectService'
+import {
+  createProjectFromPrompt,
+  generateCadForProject,
+} from '../services/projectService'
 
 type SpecStatus = 'idle' | 'generating' | 'ready' | 'error'
 
@@ -39,6 +42,8 @@ export const useSpecStore = create<SpecState>((set, get) => ({
 
     try {
       const project = await createProjectFromPrompt(prompt)
+
+      void generateCadForProject(project.id)
 
       set({
         status: 'ready',

@@ -1,7 +1,15 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, useParams } from '@tanstack/react-router'
-import { loadProject, type Project } from '../services/projectService'
+import {
+  loadProject,
+  PROJECT_UPDATED_EVENT,
+  type Project,
+} from '../services/projectService'
 import { createPlanDisplaySections } from './planDisplay'
+
+const CadPreview = lazy(async () => ({
+  default: (await import('./CadPreview')).CadPreview,
+}))
 
 const specSections = [
   ['Requirements', 'requirements'],
@@ -47,6 +55,34 @@ export function SpecsPage() {
     }
   }, [projectId])
 
+  useEffect(() => {
+    const handleProjectUpdated = (event: Event) => {
+      const updatedProjectId = (event as CustomEvent<{ projectId?: string }>)
+        .detail?.projectId
+
+      if (updatedProjectId !== projectId) return
+
+      loadProject(projectId)
+        .then((project) => {
+          setLoadState({ projectId, status: 'ready', project })
+        })
+        .catch((error) => {
+          setLoadState({
+            projectId,
+            status: 'error',
+            message:
+              error instanceof Error ? error.message : 'Failed to load project.',
+          })
+        })
+    }
+
+    window.addEventListener(PROJECT_UPDATED_EVENT, handleProjectUpdated)
+
+    return () => {
+      window.removeEventListener(PROJECT_UPDATED_EVENT, handleProjectUpdated)
+    }
+  }, [projectId])
+
   const state: ProjectLoadState =
     loadState.projectId === projectId
       ? loadState
@@ -85,6 +121,15 @@ export function SpecsPage() {
   return (
     <main className="spec-page">
       <section className="spec-layout">
+        <Suspense
+          fallback={
+            <aside className="cad-panel">
+              <div className="cad-placeholder">Loading CAD...</div>
+            </aside>
+          }
+        >
+          <CadPreview cad={project.cad} />
+        </Suspense>
         <article className="spec-document">
           <header className="spec-document-header">
             <p className="eyebrow">Hardware spec</p>

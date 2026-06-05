@@ -1,5 +1,8 @@
 import { describe, expect, test } from 'vitest'
-import { isComponentSelection } from './hardwarePlanContract.ts'
+import {
+  describeHardwarePlanValidationErrors,
+  isComponentSelection,
+} from './hardwarePlanContract.ts'
 
 const baseComponent = {
   id: 'esp32',
@@ -23,6 +26,24 @@ describe('isComponentSelection', () => {
               catalogPartId: 'esp32-devkit-v1',
               description: '',
               reason: '',
+            },
+          },
+        ],
+      }),
+    ).toBe(true)
+  })
+
+  test('accepts catalog-backed component references with explanatory text', () => {
+    expect(
+      isComponentSelection({
+        components: [
+          {
+            ...baseComponent,
+            partRef: {
+              kind: 'catalog',
+              catalogPartId: 'esp32-devkit-v1',
+              description: 'ESP32 DevKit-style development board.',
+              reason: 'A good beginner controller for Wi-Fi hardware.',
             },
           },
         ],
@@ -62,5 +83,30 @@ describe('isComponentSelection', () => {
         ],
       }),
     ).toBe(false)
+  })
+
+  test('describes invalid component validation failures', () => {
+    expect(
+      describeHardwarePlanValidationErrors({
+        overview: {},
+        architecture: {},
+        components: {
+          components: [
+            {
+              ...baseComponent,
+              partRef: {
+                kind: 'made-up-kind',
+                catalogPartId: '',
+                description: '',
+                reason: '',
+              },
+            },
+          ],
+        },
+        connections: {},
+        review: {},
+        spec: {},
+      }),
+    ).toContain('components.components[0].partRef is invalid')
   })
 })

@@ -11,8 +11,9 @@ type GeminiResponse = {
 type StructuredObjectRequest<T> = {
   prompt: string
   schema: unknown
+  normalize?: (value: unknown) => unknown
   validate: (value: unknown) => value is T
-  invalidMessage: string
+  invalidMessage: string | ((value: unknown) => string)
   retryDelayMs?: number
 }
 
@@ -21,12 +22,13 @@ const maxAttempts = 3
 export async function generateStructuredObject<T>({
   prompt,
   schema,
+  normalize,
   validate,
   invalidMessage,
   retryDelayMs = 400,
 }: StructuredObjectRequest<T>): Promise<T> {
   const apiKey = Deno.env.get('GEMINI_API_KEY')
-  const model = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash'
+  const model = Deno.env.get('GEMINI_MODEL') ?? 'gemini-2.5-flash'
 
   if (!apiKey) {
     throw new Error('Missing GEMINI_API_KEY')
@@ -83,10 +85,16 @@ export async function generateStructuredObject<T>({
     throw new Error('Gemini returned no text')
   }
 
-  const parsed = JSON.parse(text) as unknown
+  const parsed = normalize
+    ? normalize(JSON.parse(text) as unknown)
+    : (JSON.parse(text) as unknown)
 
   if (!validate(parsed)) {
-    throw new Error(invalidMessage)
+    throw new Error(
+      typeof invalidMessage === 'function'
+        ? invalidMessage(parsed)
+        : invalidMessage,
+    )
   }
 
   return parsed
@@ -100,7 +108,7 @@ async function createGeminiErrorMessage(response: Response) {
   const body = await response.text()
 
   if (isRetryableStatus(response.status)) {
-    return 'Gemini is temporarily unavailable. Please try again in a minute.'
+    return `Gemini request failed after retries: ${response.status} ${body}`
   }
 
   return `Gemini request failed: ${response.status} ${body}`

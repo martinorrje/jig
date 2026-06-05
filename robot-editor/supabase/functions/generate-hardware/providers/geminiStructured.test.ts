@@ -65,7 +65,7 @@ describe('generateStructuredObject', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
-  test('uses a concise retry-later error after Gemini overload retries are exhausted', async () => {
+  test('includes retryable Gemini status details after overload retries are exhausted', async () => {
     globalWithDeno.Deno = createDenoEnv()
     globalThis.fetch = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(
@@ -91,9 +91,7 @@ describe('generateStructuredObject', () => {
         invalidMessage: 'Invalid object.',
         retryDelayMs: 0,
       }),
-    ).rejects.toThrow(
-      'Gemini is temporarily unavailable. Please try again in a minute.',
-    )
+    ).rejects.toThrow('Gemini request failed after retries: 503')
   })
 })
 

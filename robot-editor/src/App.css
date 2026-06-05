@@ -200,6 +200,13 @@
   padding: 1rem;
 }
 
+.generation-status {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 .generate-button {
   padding: 0 1.25rem;
   color: var(--accent-ink);
@@ -214,7 +221,17 @@
 }
 
 .spec-page {
+  --paper: #24231f;
+  --paper-muted: #1a1916;
+  --ink: #eee8dc;
+  --ink-muted: #b8b0a2;
+  --spec-border: #3d3930;
+
   color: var(--ink);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    #171612;
 }
 
 .spec-header {
@@ -230,17 +247,17 @@
 }
 
 .spec-layout {
-  width: min(100%, 84rem);
+  width: min(100%, 96rem);
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: clamp(1rem, 2vw, 2rem) 1.5rem 4rem;
   display: grid;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .prompt-summary,
 .spec-document,
 .empty-state {
-  border: 1px solid #d7d0bf;
+  border: 1px solid var(--spec-border, #d7d0bf);
   background: var(--paper);
 }
 
@@ -255,19 +272,96 @@
 }
 
 .spec-document {
-  padding: clamp(1.25rem, 4vw, 3rem);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.cad-panel {
+  display: grid;
+  gap: 1.25rem;
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background: var(--paper);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.cad-panel-copy {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cad-panel-copy h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.cad-viewer-shell,
+.cad-placeholder {
+  min-height: clamp(28rem, 62vh, 42rem);
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background: var(--paper-muted);
+}
+
+.cad-viewer-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.cad-viewer {
+  width: 100%;
+  height: clamp(28rem, 62vh, 42rem);
+}
+
+.cad-viewer canvas {
+  display: block;
+}
+
+.cad-viewer-error,
+.cad-placeholder {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1rem;
+  color: var(--ink-muted);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.cad-placeholder small {
+  max-width: 22rem;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.cad-viewer-error {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  border: 1px solid rgba(128, 33, 33, 0.24);
+  background: rgba(255, 244, 233, 0.92);
+  color: var(--danger);
 }
 
 .spec-document-header {
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #d7d0bf;
+  border-bottom: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .spec-document-header h1 {
-  max-width: 18ch;
+  max-width: 22ch;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
   line-height: 0.98;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -276,7 +370,7 @@
 
 .spec-summary {
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #d7d0bf;
+  border-bottom: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .spec-summary p:last-child {
@@ -289,7 +383,7 @@
 
 .spec-section {
   padding: 1.5rem 0;
-  border-bottom: 1px solid #d7d0bf;
+  border-bottom: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .spec-section:last-child {
@@ -320,7 +414,7 @@
 .plan-output {
   margin-top: 0.5rem;
   padding-top: 2rem;
-  border-top: 2px solid var(--ink);
+  border-top: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .plan-output-header {
@@ -346,14 +440,14 @@
 .plan-blocks {
   display: grid;
   grid-template-columns: 1fr;
-  border-top: 1px solid #d7d0bf;
+  border-top: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .plan-block {
   display: grid;
   gap: 0.75rem;
   padding: 1rem 0;
-  border-bottom: 1px solid #d7d0bf;
+  border-bottom: 1px solid var(--spec-border, #d7d0bf);
 }
 
 .plan-block h3 {
@@ -495,6 +589,20 @@
 
   .spec-document {
     padding: 1.125rem;
+  }
+
+  .cad-panel {
+    padding: 0.875rem;
+  }
+
+  .cad-viewer,
+  .cad-viewer-shell,
+  .cad-placeholder {
+    min-height: 22rem;
+  }
+
+  .cad-viewer {
+    height: 22rem;
   }
 
   .spec-document-header,

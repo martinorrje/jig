@@ -2,6 +2,8 @@ import type { FormEvent, KeyboardEvent } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '../store/authStore'
 import { useSpecStore } from '../store/specStore'
+import { formatElapsedTime } from '../utils/time'
+import { useElapsedSeconds } from '../utils/useElapsedSeconds'
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -16,6 +18,7 @@ export function HomePage() {
 
   const canGenerate = ready && Boolean(user)
   const isGenerating = status === 'generating'
+  const elapsedSeconds = useElapsedSeconds(isGenerating)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -69,6 +72,11 @@ export function HomePage() {
           {errorMessage ? <p className="form-error">{errorMessage}</p> : null}
 
           <div className="prompt-actions">
+            <p className="generation-status" aria-live="polite">
+              {isGenerating
+                ? `Generating plan... ${formatElapsedTime(elapsedSeconds)}`
+                : 'Plan generation starts first. CAD renders after the spec is ready.'}
+            </p>
             <button
               type="submit"
               className="generate-button"

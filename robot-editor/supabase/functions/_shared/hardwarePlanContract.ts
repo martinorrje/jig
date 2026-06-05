@@ -18,8 +18,8 @@ export type ComponentPartRef =
   | {
       kind: 'catalog'
       catalogPartId: string
-      description: ''
-      reason: ''
+      description: string
+      reason: string
     }
   | {
       kind: 'unresolved'
@@ -196,6 +196,27 @@ export const planReviewSchema = {
   required: ['summary', 'warnings', 'openQuestions', 'nextSteps'],
 } as const
 
+export const hardwarePlanSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    overview: productOverviewSchema,
+    architecture: systemArchitectureSchema,
+    components: componentSelectionSchema,
+    connections: connectionPlanSchema,
+    review: planReviewSchema,
+    spec: hardwareSpecSchema,
+  },
+  required: [
+    'overview',
+    'architecture',
+    'components',
+    'connections',
+    'review',
+    'spec',
+  ],
+} as const
+
 export function isProductOverview(value: unknown): value is ProductOverview {
   return isHardwareSpec(value)
 }
@@ -267,6 +288,72 @@ export function isHardwarePlan(value: unknown): value is HardwarePlan {
   )
 }
 
+export function describeHardwarePlanValidationErrors(value: unknown) {
+  const errors: string[] = []
+
+  if (!value || typeof value !== 'object') {
+    return ['plan must be an object']
+  }
+
+  const plan = value as Record<string, unknown>
+
+  if (!isProductOverview(plan.overview)) errors.push('overview is invalid')
+  if (!isSystemArchitecture(plan.architecture)) {
+    errors.push('architecture is invalid')
+  }
+  if (!isComponentSelection(plan.components)) {
+    errors.push(...describeComponentSelectionErrors(plan.components))
+  }
+  if (!isConnectionPlan(plan.connections)) errors.push('connections is invalid')
+  if (!isPlanReview(plan.review)) errors.push('review is invalid')
+  if (!isHardwareSpec(plan.spec)) errors.push('spec is invalid')
+
+  return errors.length > 0 ? errors : ['unknown validation error']
+}
+
+function describeComponentSelectionErrors(value: unknown) {
+  if (!value || typeof value !== 'object') return ['components is invalid']
+
+  const selection = value as Record<string, unknown>
+
+  if (!Array.isArray(selection.components)) {
+    return ['components.components must be an array']
+  }
+
+  const errors = selection.components.flatMap((component, index) =>
+    describeComponentCandidateErrors(component, `components.components[${index}]`),
+  )
+
+  return errors.length > 0 ? errors : ['components is invalid']
+}
+
+function describeComponentCandidateErrors(value: unknown, path: string) {
+  if (!value || typeof value !== 'object') return [`${path} must be an object`]
+
+  const component = value as Record<string, unknown>
+  const errors: string[] = []
+
+  for (const field of [
+    'id',
+    'name',
+    'role',
+    'category',
+    'interface',
+    'voltage',
+    'beginnerConnection',
+  ]) {
+    if (typeof component[field] !== 'string') {
+      errors.push(`${path}.${field} must be a string`)
+    }
+  }
+
+  if (!isComponentPartRef(component.partRef)) {
+    errors.push(`${path}.partRef is invalid`)
+  }
+
+  return errors
+}
+
 function isSubsystem(value: unknown) {
   if (!value || typeof value !== 'object') return false
 
@@ -311,11 +398,7 @@ function isComponentPartRef(value: unknown): value is ComponentPartRef {
   }
 
   if (partRef.kind === 'catalog') {
-    return (
-      partRef.catalogPartId.trim().length > 0 &&
-      partRef.description === '' &&
-      partRef.reason === ''
-    )
+    return partRef.catalogPartId.trim().length > 0
   }
 
   if (partRef.kind === 'unresolved') {
