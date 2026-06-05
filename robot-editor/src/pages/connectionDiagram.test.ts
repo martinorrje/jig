@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest'
 import type { HardwarePlan } from '../model/types'
 import {
   createConnectionDiagramModel,
+  createDiagramNodeLayout,
   shouldShowConnectionDiagram,
 } from './connectionDiagramModel'
 
@@ -85,6 +86,14 @@ const plan: HardwarePlan = {
     powerNotes: [],
     warnings: [],
   },
+  power: {
+    primarySource: 'USB power bank',
+    inputVoltage: '5V USB input',
+    regulatedRails: ['3.3V logic rail for STEMMA QT modules.'],
+    distribution: ['USB powers the ESP32 board and STEMMA QT bus.'],
+    userInstructions: ['Connect USB power after checking cable orientation.'],
+    safetyNotes: ['Use a current-limited source for first power-up.'],
+  },
   review: {
     summary: 'Review summary',
     warnings: [],
@@ -162,5 +171,57 @@ describe('connection diagram model', () => {
         connections: { connections: [], powerNotes: [], warnings: [] },
       }),
     ).toBe(false)
+  })
+
+  test('lays connected components out by graph direction instead of input order', () => {
+    const layout = createDiagramNodeLayout(
+      [
+        { id: 'light', name: 'Light', role: 'load', category: 'actuator' },
+        {
+          id: 'controller',
+          name: 'ESP32 Controller',
+          role: 'controller',
+          category: 'controller',
+        },
+        { id: 'driver', name: 'LED Driver', role: 'driver', category: 'driver' },
+        { id: 'knob', name: 'Knob', role: 'input', category: 'input' },
+      ],
+      [
+        {
+          id: 'controller-knob',
+          fromNodeId: 'controller',
+          fromPort: 'stemma',
+          toNodeId: 'knob',
+          toPort: 'stemma',
+          label: 'i2c · stemma-qt · 3.3V',
+          physicalMethod: 'STEMMA QT cable',
+        },
+        {
+          id: 'knob-driver',
+          fromNodeId: 'knob',
+          fromPort: 'stemma',
+          toNodeId: 'driver',
+          toPort: 'stemma',
+          label: 'i2c · stemma-qt · 3.3V',
+          physicalMethod: 'STEMMA QT cable',
+        },
+        {
+          id: 'driver-light',
+          fromNodeId: 'driver',
+          fromPort: 'out',
+          toNodeId: 'light',
+          toPort: 'in',
+          label: 'power · stemma-qt · 3.3V',
+          physicalMethod: 'STEMMA QT cable',
+        },
+      ],
+    )
+
+    expect(layout).toEqual([
+      { nodeId: 'controller', column: 0, row: 0 },
+      { nodeId: 'knob', column: 1, row: 0 },
+      { nodeId: 'driver', column: 2, row: 0 },
+      { nodeId: 'light', column: 3, row: 0 },
+    ])
   })
 })

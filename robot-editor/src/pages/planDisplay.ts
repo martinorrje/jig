@@ -46,6 +46,17 @@ export function createPlanDisplaySections(
       items: plan.connections.powerNotes,
     },
     {
+      title: 'Power',
+      items: [
+        `Primary source: ${plan.power.primarySource}`,
+        `Input voltage: ${plan.power.inputVoltage}`,
+        ...plan.power.regulatedRails.map((item) => `Rail: ${item}`),
+        ...plan.power.distribution.map((item) => `Distribution: ${item}`),
+        ...plan.power.userInstructions.map((item) => `Instruction: ${item}`),
+        ...plan.power.safetyNotes.map((item) => `Safety: ${item}`),
+      ],
+    },
+    {
       title: 'Connection warnings',
       items: plan.connections.warnings,
     },

@@ -62,6 +62,17 @@ const plan: HardwarePlan = {
     powerNotes: ['Use a suitable external power supply for heaters.'],
     warnings: ['Do not drive heaters directly from GPIO.'],
   },
+  power: {
+    primarySource: 'External DC power supply',
+    inputVoltage: 'To be selected for the heater module.',
+    regulatedRails: ['3.3V logic rail from the ESP32 board regulator.'],
+    distribution: [
+      'External supply powers heater circuitry through a suitable driver.',
+      'ESP32 board powers low-current logic and connectorized modules.',
+    ],
+    userInstructions: ['Confirm heater voltage and current before connecting power.'],
+    safetyNotes: ['Use a fused or current-limited supply during bring-up.'],
+  },
   review: {
     summary: 'Needs thermal safety review.',
     warnings: ['Add a thermal cutoff.'],

@@ -17,6 +17,14 @@ describe('runHardwarePlanningPipeline', () => {
       architecture: { subsystems: [] },
       components: { components: [] },
       connections: { connections: [], powerNotes: [], warnings: [] },
+      power: {
+        primarySource: 'USB-C supply',
+        inputVoltage: '5V USB input',
+        regulatedRails: ['3.3V logic rail.'],
+        distribution: ['USB-C powers the controller.'],
+        userInstructions: ['Connect USB-C after inspection.'],
+        safetyNotes: ['Use current limiting.'],
+      },
       review: {
         summary: 'No review notes.',
         warnings: [],
@@ -179,6 +187,20 @@ describe('runHardwarePlanningPipeline', () => {
         'Moisture probes can corrode.',
         'Do not connect high-current loads to GPIO.',
         'Use a corrosion-resistant probe.',
+      ],
+    })
+    expect(plan.power).toEqual({
+      primarySource:
+        'User-provided power source appropriate for the selected modules.',
+      inputVoltage: 'Confirm from the selected controller, modules, and loads.',
+      regulatedRails: ['3.3V logic rail for STEMMA QT / Qwiic I2C modules.'],
+      distribution: ['Use a shared ground.'],
+      userInstructions: [
+        'Confirm voltage and current requirements before connecting power.',
+      ],
+      safetyNotes: [
+        'Use a current-limited supply during first bring-up.',
+        'Do not power high-current loads directly from ESP32 GPIO.',
       ],
     })
   })

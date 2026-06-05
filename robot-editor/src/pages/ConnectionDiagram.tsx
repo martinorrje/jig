@@ -10,7 +10,9 @@ import {
 import type { HardwarePlan } from '../model/types'
 import {
   createConnectionDiagramModel,
+  createDiagramNodeLayout,
   type ConnectionDiagramModel,
+  type DiagramNodeLayout,
 } from './connectionDiagramModel'
 
 type Point = {
@@ -78,7 +80,7 @@ function ConnectionDiagramView({ model }: { model: ConnectionDiagramModel }) {
         .map((node) => node.id)
         .filter((nodeId) => !currentPositions[nodeId])
       const initialPositions = createInitialNodePositions(
-        model.nodes.map((node) => node.id),
+        createDiagramNodeLayout(model.nodes, model.edges),
         stageRect,
       )
 
@@ -98,7 +100,7 @@ function ConnectionDiagramView({ model }: { model: ConnectionDiagramModel }) {
 
       return nextPositions
     })
-  }, [model.nodes])
+  }, [model.edges, model.nodes])
 
   const measureEdges = useCallback(() => {
     const stage = stageRef.current
@@ -384,34 +386,36 @@ function getRectCenter(rect: DOMRect, stageRect: DOMRect): Point {
   }
 }
 
-function createInitialNodePositions(nodeIds: string[], stageRect: DOMRect) {
+function createInitialNodePositions(
+  layout: DiagramNodeLayout[],
+  stageRect: DOMRect,
+) {
   const nodeWidth = getNodeWidth(stageRect)
   const nodeHeight = getNodeHeight(stageRect)
-  const gap = 28
-  const columns = Math.max(
-    1,
-    Math.floor((stageRect.width + gap) / (nodeWidth + gap)),
-  )
-  const rows = Math.ceil(nodeIds.length / columns)
-  const totalWidth = Math.min(
-    stageRect.width,
-    columns * nodeWidth + (columns - 1) * gap,
-  )
-  const startX = Math.max(18, (stageRect.width - totalWidth) / 2)
-  const totalHeight = rows * nodeHeight + (rows - 1) * gap
-  const startY = Math.max(18, (stageRect.height - totalHeight) / 2)
+  const margin = 28
+  const columns = Math.max(1, ...layout.map((item) => item.column + 1))
+  const rowsByColumn = layout.reduce<Record<number, number>>((rows, item) => {
+    rows[item.column] = Math.max(rows[item.column] ?? 0, item.row + 1)
+    return rows
+  }, {})
+  const availableX = Math.max(0, stageRect.width - nodeWidth - margin * 2)
 
   return Object.fromEntries(
-    nodeIds.map((nodeId, index) => {
-      const column = index % columns
-      const row = Math.floor(index / columns)
+    layout.map(({ nodeId, column, row }) => {
+      const rows = rowsByColumn[column] ?? 1
+      const availableY = Math.max(0, stageRect.height - nodeHeight - margin * 2)
+      const x =
+        columns === 1
+          ? (stageRect.width - nodeWidth) / 2
+          : margin + (availableX * column) / (columns - 1)
+      const y =
+        rows === 1
+          ? (stageRect.height - nodeHeight) / 2
+          : margin + (availableY * row) / (rows - 1)
 
       return [
         nodeId,
-        {
-          x: startX + column * (nodeWidth + gap),
-          y: startY + row * (nodeHeight + gap),
-        },
+        clampNodePosition({ x, y }, stageRect),
       ]
     }),
   )

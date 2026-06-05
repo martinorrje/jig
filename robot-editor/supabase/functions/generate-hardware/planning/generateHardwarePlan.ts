@@ -3,6 +3,7 @@ import {
   hardwarePlanSchema,
   type HardwarePlan,
   isHardwarePlan,
+  normalizeHardwarePlan as normalizeHardwarePlanContract,
 } from '../../_shared/hardwarePlanContract.ts'
 import { buildCatalogPromptSummary } from '../catalog/partCatalog.ts'
 import { generateStructuredObject } from '../providers/geminiStructured.ts'
@@ -21,11 +22,11 @@ export async function generateHardwarePlan(prompt: string) {
 export function normalizeHardwarePlan(value: unknown): unknown {
   if (!value || typeof value !== 'object') return value
 
-  const plan = value as HardwarePlan
+  const plan = normalizeHardwarePlanContract(value) as HardwarePlan
 
   if (!Array.isArray(plan.components?.components)) return value
 
-  return {
+  return normalizeHardwarePlanContract({
     ...plan,
     components: {
       ...plan.components,
@@ -34,7 +35,7 @@ export function normalizeHardwarePlan(value: unknown): unknown {
         partRef: normalizePartRef(component.partRef, component.name),
       })),
     },
-  }
+  })
 }
 
 function normalizePartRef(partRef: unknown, componentName: string) {
@@ -87,6 +88,9 @@ Rules:
 - Use a 3.3V STEMMA QT / Qwiic bus for every connectorized connection.
 - Never use 5V for a Qwiic-compatible bus.
 - Set connection connectorStandard to "stemma-qt" or "qwiic" and busVoltage to "3.3V".
+- Always include a power section that specifies exactly how the created hardware configuration should be powered.
+- The power section must name the primary source, input voltage, regulated rails, distribution path, user power-up instructions, and safety notes.
+- If the correct power source is unknown, say what must be confirmed instead of guessing a dangerous supply.
 - Prefer ESP32-compatible controller options with a STEMMA QT/Qwiic connector when embedded control is applicable.
 - If no connectorized catalog part fits, mark the component unresolved instead of inventing loose wiring.
 - Use driver modules for motors, pumps, fans, heaters, solenoids, relays, and LED strips.

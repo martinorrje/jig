@@ -20,6 +20,7 @@ export async function assembleHardwarePlan(
       architecture,
       components,
       connections,
+      power: composePowerPlan(connections),
       review,
       spec: composeHardwareSpec({
         overview,
@@ -28,6 +29,25 @@ export async function assembleHardwarePlan(
         review,
       }),
     },
+  }
+}
+
+function composePowerPlan(connections: HardwarePlan['connections']) {
+  return {
+    primarySource: 'User-provided power source appropriate for the selected modules.',
+    inputVoltage: 'Confirm from the selected controller, modules, and loads.',
+    regulatedRails: ['3.3V logic rail for STEMMA QT / Qwiic I2C modules.'],
+    distribution:
+      connections.powerNotes.length > 0
+        ? connections.powerNotes
+        : ['Route power through the selected controller and compatible connectorized modules.'],
+    userInstructions: [
+      'Confirm voltage and current requirements before connecting power.',
+    ],
+    safetyNotes: [
+      'Use a current-limited supply during first bring-up.',
+      'Do not power high-current loads directly from ESP32 GPIO.',
+    ],
   }
 }
 

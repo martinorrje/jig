@@ -56,6 +56,17 @@ const plan: HardwarePlan = {
     powerNotes: ['Use a shared ground.'],
     warnings: ['Do not drive high-current loads from GPIO.'],
   },
+  power: {
+    primarySource: 'USB power bank',
+    inputVoltage: '5V USB input',
+    regulatedRails: ['3.3V logic rail from the ESP32 board regulator.'],
+    distribution: [
+      'USB power feeds the ESP32 board.',
+      'The ESP32 STEMMA QT port powers the I2C sensor bus at 3.3V.',
+    ],
+    userInstructions: ['Plug the USB cable into the power bank after assembly.'],
+    safetyNotes: ['Use a current-limited USB source for first power-up.'],
+  },
   review: {
     summary: 'Safe for a beginner prototype.',
     warnings: ['Use a corrosion-resistant probe.'],
@@ -105,6 +116,18 @@ describe('createPlanDisplaySections', () => {
       {
         title: 'Power notes',
         items: ['Use a shared ground.'],
+      },
+      {
+        title: 'Power',
+        items: [
+          'Primary source: USB power bank',
+          'Input voltage: 5V USB input',
+          'Rail: 3.3V logic rail from the ESP32 board regulator.',
+          'Distribution: USB power feeds the ESP32 board.',
+          'Distribution: The ESP32 STEMMA QT port powers the I2C sensor bus at 3.3V.',
+          'Instruction: Plug the USB cable into the power bank after assembly.',
+          'Safety: Use a current-limited USB source for first power-up.',
+        ],
       },
       {
         title: 'Connection warnings',

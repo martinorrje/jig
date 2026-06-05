@@ -29,6 +29,14 @@ const plan: HardwarePlan = {
   architecture: { subsystems: [] },
   components: { components: [] },
   connections: { connections: [], powerNotes: [], warnings: [] },
+  power: {
+    primarySource: 'USB-C supply',
+    inputVoltage: '5V USB input',
+    regulatedRails: ['3.3V logic rail from the ESP32 board regulator.'],
+    distribution: ['USB-C powers the controller and low-current modules.'],
+    userInstructions: ['Connect USB-C after inspecting the wiring.'],
+    safetyNotes: ['Use a current-limited supply during first bring-up.'],
+  },
   review: { summary: '', warnings: [], openQuestions: [], nextSteps: [] },
   spec: {
     title: 'Speaker Module',

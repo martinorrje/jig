@@ -58,6 +58,15 @@ export type ConnectionPlan = {
   warnings: string[]
 }
 
+export type PowerPlan = {
+  primarySource: string
+  inputVoltage: string
+  regulatedRails: string[]
+  distribution: string[]
+  userInstructions: string[]
+  safetyNotes: string[]
+}
+
 export type PlanReview = {
   summary: string
   warnings: string[]
@@ -70,6 +79,7 @@ export type HardwarePlan = {
   architecture: SystemArchitecture
   components: ComponentSelection
   connections: ConnectionPlan
+  power: PowerPlan
   review: PlanReview
   spec: HardwareSpec
 }
@@ -209,6 +219,27 @@ export const planReviewSchema = {
   required: ['summary', 'warnings', 'openQuestions'],
 } as const
 
+export const powerPlanSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    primarySource: stringProperty,
+    inputVoltage: stringProperty,
+    regulatedRails: stringArrayProperty,
+    distribution: stringArrayProperty,
+    userInstructions: stringArrayProperty,
+    safetyNotes: stringArrayProperty,
+  },
+  required: [
+    'primarySource',
+    'inputVoltage',
+    'regulatedRails',
+    'distribution',
+    'userInstructions',
+    'safetyNotes',
+  ],
+} as const
+
 export const hardwarePlanSchema = {
   type: 'object',
   additionalProperties: false,
@@ -217,6 +248,7 @@ export const hardwarePlanSchema = {
     architecture: systemArchitectureSchema,
     components: componentSelectionSchema,
     connections: connectionPlanSchema,
+    power: powerPlanSchema,
     review: planReviewSchema,
     spec: hardwareSpecSchema,
   },
@@ -225,6 +257,7 @@ export const hardwarePlanSchema = {
     'architecture',
     'components',
     'connections',
+    'power',
     'review',
     'spec',
   ],
@@ -286,6 +319,21 @@ export function isPlanReview(value: unknown): value is PlanReview {
   )
 }
 
+export function isPowerPlan(value: unknown): value is PowerPlan {
+  if (!value || typeof value !== 'object') return false
+
+  const plan = value as Record<string, unknown>
+
+  return (
+    typeof plan.primarySource === 'string' &&
+    typeof plan.inputVoltage === 'string' &&
+    isStringArray(plan.regulatedRails) &&
+    isStringArray(plan.distribution) &&
+    isStringArray(plan.userInstructions) &&
+    isStringArray(plan.safetyNotes)
+  )
+}
+
 export function isHardwarePlan(value: unknown): value is HardwarePlan {
   if (!value || typeof value !== 'object') return false
 
@@ -296,6 +344,7 @@ export function isHardwarePlan(value: unknown): value is HardwarePlan {
     isSystemArchitecture(plan.architecture) &&
     isComponentSelection(plan.components) &&
     isConnectionPlan(plan.connections) &&
+    isPowerPlan(plan.power) &&
     isPlanReview(plan.review) &&
     isHardwareSpec(plan.spec)
   )
@@ -306,22 +355,25 @@ export function normalizeHardwarePlan(value: unknown): unknown {
 
   const plan = value as Record<string, unknown>
 
-  if (!plan.connections || typeof plan.connections !== 'object') {
-    return value
-  }
+  const connections =
+    plan.connections && typeof plan.connections === 'object'
+      ? (plan.connections as Record<string, unknown>)
+      : null
 
-  const connections = plan.connections as Record<string, unknown>
-
-  if (!Array.isArray(connections.connections)) {
-    return value
-  }
+  const normalizedConnections =
+    connections && Array.isArray(connections.connections)
+      ? {
+          ...connections,
+          connections: connections.connections.map(normalizeConnection),
+        }
+      : plan.connections
 
   return {
     ...plan,
-    connections: {
-      ...connections,
-      connections: connections.connections.map(normalizeConnection),
-    },
+    connections: normalizedConnections,
+    power: isPowerPlan(plan.power)
+      ? plan.power
+      : createDefaultPowerPlan(connections),
   }
 }
 
@@ -342,6 +394,7 @@ export function describeHardwarePlanValidationErrors(value: unknown) {
     errors.push(...describeComponentSelectionErrors(plan.components))
   }
   if (!isConnectionPlan(plan.connections)) errors.push('connections is invalid')
+  if (!isPowerPlan(plan.power)) errors.push('power is invalid')
   if (!isPlanReview(plan.review)) errors.push('review is invalid')
   if (!isHardwareSpec(plan.spec)) errors.push('spec is invalid')
 
@@ -500,4 +553,27 @@ function inferConnectorStandard(value: unknown): ConnectorStandardId {
   }
 
   return 'stemma-qt'
+}
+
+function createDefaultPowerPlan(connections: Record<string, unknown> | null) {
+  const powerNotes = isStringArray(connections?.powerNotes)
+    ? connections.powerNotes
+    : []
+
+  return {
+    primarySource: 'User-provided external power source appropriate for the selected modules.',
+    inputVoltage: 'To be confirmed from selected component requirements.',
+    regulatedRails: ['3.3V logic rail for STEMMA QT / Qwiic I2C modules.'],
+    distribution:
+      powerNotes.length > 0
+        ? powerNotes
+        : ['Power distribution must be confirmed before fabrication or assembly.'],
+    userInstructions: [
+      'Do not connect power until the required input voltage and current rating are confirmed.',
+    ],
+    safetyNotes: [
+      'Use a current-limited supply during first bring-up.',
+      'Do not power high-current loads directly from ESP32 GPIO.',
+    ],
+  }
 }

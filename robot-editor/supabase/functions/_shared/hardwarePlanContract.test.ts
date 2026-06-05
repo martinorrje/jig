@@ -4,6 +4,7 @@ import {
   isHardwarePlan,
   isConnectionPlan,
   isComponentSelection,
+  isPowerPlan,
   normalizeHardwarePlan,
 } from './hardwarePlanContract.ts'
 
@@ -160,6 +161,21 @@ describe('isConnectionPlan', () => {
   })
 })
 
+describe('isPowerPlan', () => {
+  test('accepts explicit hardware power instructions', () => {
+    expect(
+      isPowerPlan({
+        primarySource: 'USB-C wall adapter',
+        inputVoltage: '5V USB input',
+        regulatedRails: ['3.3V logic rail from the controller regulator.'],
+        distribution: ['USB-C powers the controller and STEMMA QT bus.'],
+        userInstructions: ['Plug in USB-C after all modules are connected.'],
+        safetyNotes: ['Use a current-limited supply during first bring-up.'],
+      }),
+    ).toBe(true)
+  })
+})
+
 describe('isHardwarePlan', () => {
   test('accepts plans without review nextSteps', () => {
     expect(
@@ -187,6 +203,14 @@ describe('isHardwarePlan', () => {
           ],
         },
         connections: { connections: [], powerNotes: [], warnings: [] },
+        power: {
+          primarySource: 'USB-C wall adapter',
+          inputVoltage: '5V USB input',
+          regulatedRails: ['3.3V logic rail from the controller regulator.'],
+          distribution: ['USB-C powers the controller and STEMMA QT bus.'],
+          userInstructions: ['Plug in USB-C after all modules are connected.'],
+          safetyNotes: ['Use a current-limited supply during first bring-up.'],
+        },
         review: {
           summary: 'Ready for review.',
           warnings: [],
@@ -240,7 +264,7 @@ describe('isHardwarePlan', () => {
             physicalMethod: 'STEMMA QT cable',
           },
         ],
-        powerNotes: [],
+        powerNotes: ['USB-C powers the controller.'],
         warnings: [],
       },
       review: {
@@ -261,11 +285,19 @@ describe('isHardwarePlan', () => {
     expect(isHardwarePlan(normalized)).toBe(true)
     const normalizedPlan = normalized as {
       connections: { connections: Array<Record<string, unknown>> }
+      power: Record<string, unknown>
     }
     expect(normalizedPlan.connections.connections[0]).toEqual(
       expect.objectContaining({
         connectorStandard: 'stemma-qt',
         busVoltage: '3.3V',
+      }),
+    )
+    expect(normalizedPlan.power).toEqual(
+      expect.objectContaining({
+        primarySource:
+          'User-provided external power source appropriate for the selected modules.',
+        distribution: ['USB-C powers the controller.'],
       }),
     )
   })
