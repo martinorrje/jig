@@ -1,0 +1,1678 @@
+[
+  {
+    "id": "5743-mini-gamepad-stemma-qt",
+    "name": "5743 Mini Gamepad STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "5743 Mini Gamepad STEMMA QT/5743 Mini Gamepad STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5743%20Mini%20Gamepad%20STEMMA%20QT/5743%20Mini%20Gamepad%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      50.8,
+      22.86,
+      13.07
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          48.26,
+          20.32,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6013; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          48.26,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6095; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          20.32,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6015; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6093; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:28:54.104Z"
+  },
+  {
+    "id": "5664-pca9546-stemma-qt",
+    "name": "5664 PCA9546 Stemma QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "5664 PCA9546 Stemma QT/5664 PCA9546 Stemma QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5664%20PCA9546%20Stemma%20QT/5664%20PCA9546%20Stemma%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      20.32,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          17.78,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #6431; radius 1.016 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #6429; radius 1.016 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          17.907,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6420; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6342; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:28:11.297Z"
+  },
+  {
+    "id": "5626-pca9548-stemma",
+    "name": "5626 PCA9548 Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "5626 PCA9548 Stemma/5626 PCA9548 Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5626%20PCA9548%20Stemma/5626%20PCA9548%20Stemma.step"
+    },
+    "dimensionsMm": [
+      40.64,
+      20.32,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          38.1,
+          17.78,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #7225; radius 1.016 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          38.1,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #7223; radius 1.016 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          17.907,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7212; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7082; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:27:28.262Z"
+  },
+  {
+    "id": "5625-stemma-5-port-hub",
+    "name": "5625 Stemma 5 Port Hub",
+    "source": {
+      "provider": "adafruit",
+      "path": "5625 Stemma 5 Port Hub/5625 Stemma 5 Port Hub.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5625%20Stemma%205%20Port%20Hub/5625%20Stemma%205%20Port%20Hub.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      5.87
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2915; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2913; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2925; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2927; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:26:39.569Z"
+  },
+  {
+    "id": "5295-neoslider-stemma",
+    "name": "5295 NeoSlider Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "5295 NeoSlider Stemma/5295 NeoSlider Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5295%20NeoSlider%20Stemma/5295%20NeoSlider%20Stemma.step"
+    },
+    "dimensionsMm": [
+      76.2,
+      21.59,
+      20.03
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          19.05,
+          8.255,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7578; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          19.05,
+          -8.255,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7580; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          -19.05,
+          8.255,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7498; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          -19.05,
+          -8.255,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7496; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:26:01.329Z"
+  },
+  {
+    "id": "5201-is31fl3741-stemma",
+    "name": "5201 IS31FL3741 STEMMA",
+    "source": {
+      "provider": "adafruit",
+      "path": "5201 IS31FL3741 STEMMA/5201 IS31FL3741 STEMMA.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5201%20IS31FL3741%20STEMMA/5201%20IS31FL3741%20STEMMA.step"
+    },
+    "dimensionsMm": [
+      39,
+      51.08,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          36.5,
+          36,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7425; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          36.5,
+          -2.5,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7423; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.5,
+          36,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7747; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.5,
+          -2.5,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #7749; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:25:03.373Z"
+  },
+  {
+    "id": "5027-mcp9808-stemma",
+    "name": "5027 MCP9808 Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "5027 MCP9808 Stemma/5027 MCP9808 Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5027%20MCP9808%20Stemma/5027%20MCP9808%20Stemma.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2592; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2594; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2556; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #2554; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:24:08.060Z"
+  },
+  {
+    "id": "4918-tca8418-stemma",
+    "name": "4918 TCA8418 Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "4918 TCA8418 Stemma/4918 TCA8418 Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4918%20TCA8418%20Stemma/4918%20TCA8418%20Stemma.step"
+    },
+    "dimensionsMm": [
+      35.56,
+      17.78,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          8.89,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6032; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "back_mount",
+        "kind": "mount",
+        "positionMm": [
+          12.7,
+          8.89,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6076; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:23:22.693Z"
+  },
+  {
+    "id": "4808-emc2101-stemma-qt",
+    "name": "4808 EMC2101 STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "4808 EMC2101 STEMMA QT/4808 EMC2101 STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4808%20EMC2101%20STEMMA%20QT/4808%20EMC2101%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3732; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3734; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "datum",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3696; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "datum",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3694; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:22:41.606Z"
+  },
+  {
+    "id": "4754-bno085-stemma-qt",
+    "name": "4754 BNO085 STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "4754 BNO085 STEMMA QT/4754 BNO085 STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4754%20BNO085%20STEMMA%20QT/4754%20BNO085%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      22.86,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          20.32,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #8370; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #8372; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          20.32,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #8284; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #8282; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:21:53.041Z"
+  },
+  {
+    "id": "4646-bno055-stemma",
+    "name": "4646 BNO055 Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "4646 BNO055 Stemma/4646 BNO055 Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4646%20BNO055%20Stemma/4646%20BNO055%20Stemma.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      20.32,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          17.78,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6843; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6845; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          17.78,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6759; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #6757; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:20:46.840Z"
+  },
+  {
+    "id": "4469-mlx90640-stemma",
+    "name": "4469 MLX90640 Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "4469 MLX90640 Stemma/4469 MLX90640 Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4469%20MLX90640%20Stemma/4469%20MLX90640%20Stemma.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      11.7
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3810; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3808; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "datum",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3838; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "datum",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #3840; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:19:58.933Z"
+  },
+  {
+    "id": "4431-stemma-buttons",
+    "name": "4431 STEMMA Buttons",
+    "source": {
+      "provider": "adafruit",
+      "path": "4431 STEMMA Buttons/4431 STEMMA Buttons.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4431%20STEMMA%20Buttons/4431%20STEMMA%20Buttons.step"
+    },
+    "dimensionsMm": [
+      20.8,
+      27.8,
+      14.132
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_mount",
+        "kind": "mount",
+        "positionMm": [
+          17.8,
+          2.4,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #1894; radius 1.6 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "back_mount",
+        "kind": "mount",
+        "positionMm": [
+          3,
+          2.4,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #1896; radius 1.6 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:19:15.496Z"
+  },
+  {
+    "id": "2652-bmp280-stemma-qt",
+    "name": "2652 BMP280 STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "2652 Adafruit BME280/2652 BMP280 STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/2652%20Adafruit%20BME280/2652%20BMP280%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #4578; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #4621; radius 1.27 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #4610; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #4623; radius 1.27 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:18:42.870Z"
+  },
+  {
+    "id": "1982-mpr121q-qt",
+    "name": "1982 MPR121Q QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "1982 MPR121 Stemma Breakout/1982 MPR121Q QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/1982%20MPR121%20Stemma%20Breakout/1982%20MPR121Q%20QT.step"
+    },
+    "dimensionsMm": [
+      33.02,
+      19.177,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_mount",
+        "kind": "mount",
+        "positionMm": [
+          30.48,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5004; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "back_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #4926; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:17:53.755Z"
+  },
+  {
+    "id": "1910-alphanumeric-backpack-stemma-qt",
+    "name": "1910 Alphanumeric Backpack STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "1910 Alphanumeric Backpack STEMMA QT/1910 Alphanumeric Backpack STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/1910%20Alphanumeric%20Backpack%20STEMMA%20QT/1910%20Alphanumeric%20Backpack%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      50.8,
+      27.94,
+      13.57
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          23.495,
+          12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8771; radius 1 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          23.495,
+          -12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #20205; radius 1 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          -23.495,
+          12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8769; radius 1 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          -23.495,
+          -12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8765; radius 1 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:17:22.227Z"
+  },
+  {
+    "id": "5880-rotary-encoder-i2c-stemma-qt",
+    "name": "5880 Rotary Encoder I2C STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "5880 Rotary Encoder I2C STEMMA QT/5880 Rotary Encoder I2C STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5880%20Rotary%20Encoder%20I2C%20STEMMA%20QT/5880%20Rotary%20Encoder%20I2C%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      25.4,
+      25.93
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8467; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          22.86,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8469; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8561; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          22.86,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8559; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:16:07.905Z"
+  },
+  {
+    "id": "3885-stemma-speaker-rev-a",
+    "name": "3885 STEMMA Speaker rev A",
+    "source": {
+      "provider": "adafruit",
+      "path": "3885 STEMMA Speaker/3885 STEMMA Speaker rev A.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/3885%20STEMMA%20Speaker/3885%20STEMMA%20Speaker%20rev%20A.step"
+    },
+    "dimensionsMm": [
+      30.48,
+      36.83,
+      6.57
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          27.94,
+          34.29,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5153; radius 1.1 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          27.94,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5155; radius 1.1 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          34.29,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5133; radius 1.1 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5131; radius 1.1 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:15:22.202Z"
+  },
+  {
+    "id": "938-mono-128x64-oled-stemma",
+    "name": "938 Mono 128x64 OLED Stemma",
+    "source": {
+      "provider": "adafruit",
+      "path": "938 Mono 128x64 OLED Stemma/938 Mono 128x64 OLED Stemma.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/938%20Mono%20128x64%20OLED%20Stemma/938%20Mono%20128x64%20OLED%20Stemma.step"
+    },
+    "dimensionsMm": [
+      35.56,
+      33.014,
+      6.526
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          33.02,
+          30.48,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #5833; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          33.02,
+          2.54,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5849; radius 2.54 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #5773; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          30.48,
+          1.57
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #5775; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:14:36.490Z"
+  },
+  {
+    "id": "1911-alphanumberic-display-stemma-qt",
+    "name": "1911 Alphanumberic Display STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "1911 Alphanumberic Display STEMMA QT/1911 Alphanumberic Display STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/1911%20Alphanumberic%20Display%20STEMMA%20QT/1911%20Alphanumberic%20Display%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      50.8,
+      27.94,
+      13.57
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          -23.495,
+          12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8769; radius 1 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          -23.495,
+          -12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8765; radius 1 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          23.495,
+          -12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8767; radius 1 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          23.495,
+          12.065,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #8771; radius 1 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:13:45.739Z"
+  },
+  {
+    "id": "4097-adxl343-stemma-qt",
+    "name": "4097 ADXL343 STEMMA QT",
+    "source": {
+      "provider": "adafruit",
+      "path": "4097 ADXL343 Accelerometer/4097 ADXL343 STEMMA QT.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4097%20ADXL343%20Accelerometer/4097%20ADXL343%20STEMMA%20QT.step"
+    },
+    "dimensionsMm": [
+      25.4,
+      17.78,
+      4.53
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "front_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5050; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "front_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5048; radius 1.25 mm."
+      },
+      {
+        "id": "attachment-3",
+        "label": "back_right_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #5060; radius 2.54 mm."
+      },
+      {
+        "id": "attachment-4",
+        "label": "back_left_mount",
+        "kind": "mount",
+        "positionMm": [
+          2.54,
+          15.24,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "notes": "Selected center from #4982; radius 1.25 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:12:35.901Z"
+  },
+  {
+    "id": "4026-stemma-soil-sensor",
+    "name": "4026 STEMMA Soil Sensor",
+    "source": {
+      "provider": "adafruit",
+      "path": "4026 STEMMA Soil Sensor/4026 STEMMA Soil Sensor.step",
+      "format": "step",
+      "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/4026%20STEMMA%20Soil%20Sensor/4026%20STEMMA%20Soil%20Sensor.step"
+    },
+    "dimensionsMm": [
+      76.2,
+      13.97,
+      6.37
+    ],
+    "attachmentPoints": [
+      {
+        "id": "attachment-1",
+        "label": "right_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          11.176,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #5998; radius 1.27 mm."
+      },
+      {
+        "id": "attachment-2",
+        "label": "left_mount",
+        "kind": "mount",
+        "positionMm": [
+          22.86,
+          2.54,
+          0
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "notes": "Selected center from #6000; radius 1.27 mm."
+      }
+    ],
+    "updatedAt": "2026-06-05T08:11:38.612Z"
+  }
+]

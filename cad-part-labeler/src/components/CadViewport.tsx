@@ -76,9 +76,11 @@ export function CadViewport({
       const [
         {
           AmbientLight,
+          AxesHelper,
           Box3,
           BufferAttribute,
           BufferGeometry,
+          CanvasTexture,
           Color,
           DirectionalLight,
           EdgesGeometry,
@@ -95,6 +97,8 @@ export function CadViewport({
           Raycaster,
           Scene,
           SphereGeometry,
+          Sprite,
+          SpriteMaterial,
           Vector2,
           Vector3,
           WebGLRenderer,
@@ -136,7 +140,14 @@ export function CadViewport({
       const partGroup = new Group()
       const markerGroup = new Group()
       const hoverGroup = new Group()
-      scene.add(partGroup, markerGroup, hoverGroup)
+      const axesGroup = new Group()
+      scene.add(partGroup, markerGroup, hoverGroup, axesGroup)
+
+      const axes = new AxesHelper(40)
+      axesGroup.add(axes)
+      axesGroup.add(createAxisLabel('X', '#ff6b5f', [46, 0, 0]))
+      axesGroup.add(createAxisLabel('Y', '#5bd978', [0, 46, 0]))
+      axesGroup.add(createAxisLabel('Z', '#65a7ff', [0, 0, 46]))
 
       const raycaster = new Raycaster()
       const pointer = new Vector2()
@@ -307,6 +318,7 @@ export function CadViewport({
           -center.y * worldScale,
           -center.z * worldScale,
         )
+        axesGroup.scale.setScalar(Math.max(0.45, normalizedRadius / 40))
 
         callbacksRef.current.onDimensionsChange([
           roundMm(size.x),
@@ -441,6 +453,37 @@ export function CadViewport({
         controls.update()
       }
 
+      function createAxisLabel(text: string, color: string, position: Vec3) {
+        const canvas = document.createElement('canvas')
+        canvas.width = 96
+        canvas.height = 96
+
+        const context = canvas.getContext('2d')
+        if (context) {
+          context.fillStyle = 'rgba(16, 18, 20, 0.74)'
+          context.beginPath()
+          context.arc(48, 48, 31, 0, Math.PI * 2)
+          context.fill()
+
+          context.fillStyle = color
+          context.font = '700 46px system-ui, sans-serif'
+          context.textAlign = 'center'
+          context.textBaseline = 'middle'
+          context.fillText(text, 48, 49)
+        }
+
+        const texture = new CanvasTexture(canvas)
+        const material = new SpriteMaterial({
+          map: texture,
+          transparent: true,
+          depthTest: false,
+        })
+        const sprite = new Sprite(material)
+        sprite.position.set(...position)
+        sprite.scale.set(9, 9, 1)
+        return sprite
+      }
+
       function resize() {
         const { width, height } = mount.getBoundingClientRect()
         camera.aspect = width / Math.max(height, 1)
@@ -478,6 +521,17 @@ export function CadViewport({
         selectedMarkerMaterial.dispose()
         hoverMaterial.dispose()
         edgeMaterial.dispose()
+        axes.geometry.dispose()
+        if (Array.isArray(axes.material)) {
+          axes.material.forEach((material) => material.dispose())
+        } else {
+          axes.material.dispose()
+        }
+        axesGroup.traverse((object) => {
+          if (!(object instanceof Sprite)) return
+          object.material.map?.dispose()
+          object.material.dispose()
+        })
         edgeLines.forEach((edge) => edge.geometry.dispose())
         for (const mesh of partMeshes) {
           mesh.geometry.dispose()
