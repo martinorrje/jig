@@ -35,12 +35,13 @@ export function buildComponentsPrompt(input: ComponentsInput) {
 Choose beginner-friendly component categories for this hardware architecture.
 
 Rules:
-- Prefer connectorized modules for beginners when possible.
+- Only choose connectorized STEMMA QT / Qwiic parts for v1.
+- Use the 3.3V STEMMA QT / Qwiic bus for connectorized parts.
 - Prefer catalog parts whenever possible.
 - Set partRef.kind to "catalog" with a catalogPartId when a catalog part fits.
 - Set partRef.kind to "unresolved" when no catalog part fits, with catalogPartId as an empty string and a clear description/reason.
-- Prefer ESP32-compatible controller options when embedded control is applicable.
-- Prefer Qwiic/STEMMA QT/Grove-style modules for simple sensors and displays.
+- Prefer ESP32-compatible controller options with a STEMMA QT/Qwiic connector when embedded control is applicable.
+- If the catalog has no suitable connectorized controller or component, mark that component unresolved instead of using loose wiring.
 - Use driver modules for motors, pumps, fans, heaters, solenoids, relays, and LED strips.
 - Do not pretend unresolved parts have CAD assets.
 - Do not invent exact distributor part numbers.

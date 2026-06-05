@@ -1,3 +1,4 @@
+import { adafruit5400Esp32FeatherV2 } from './5400_esp32_feather_v2/adafruit5400Esp32FeatherV2.ts'
 import { adafruit5743MiniGamepadStemmaQt } from './5743_mini_gamepad_stemma_qt/adafruit5743MiniGamepadStemmaQt.ts'
 import { adafruit5664Pca9546StemmaQt } from './5664_pca9546_stemma_qt/adafruit5664Pca9546StemmaQt.ts'
 import { adafruit5626Pca9548Stemma } from './5626_pca9548_stemma/adafruit5626Pca9548Stemma.ts'
@@ -22,6 +23,7 @@ import { adafruit4097Adxl343StemmaQt } from './4097_adxl343_stemma_qt/adafruit40
 import { adafruit4026StemmaSoilSensor } from './4026_stemma_soil_sensor/adafruit4026StemmaSoilSensor.ts'
 
 export const adafruitStemmaLabelerParts = [
+  adafruit5400Esp32FeatherV2,
   adafruit5743MiniGamepadStemmaQt,
   adafruit5664Pca9546StemmaQt,
   adafruit5626Pca9548Stemma,

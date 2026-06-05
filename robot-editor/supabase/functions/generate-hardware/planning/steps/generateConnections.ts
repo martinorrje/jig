@@ -37,11 +37,16 @@ export function buildConnectionsPrompt(input: ConnectionsInput) {
 Create a beginner-friendly logical connection plan for these components.
 
 Rules:
-- Prefer connectorized physical methods such as Grove, Qwiic, STEMMA, or STEMMA QT before breadboards or loose jumpers.
-- Use explicit power and ground connections.
+- Only use STEMMA QT / Qwiic connectorized cable connections for v1.
+- Use 3.3V for every STEMMA QT / Qwiic bus.
+- Never use 5V for a Qwiic-compatible bus.
+- Model each STEMMA QT / Qwiic connection as one cable that carries power, ground, SDA, and SCL.
+- Do not create separate loose-wire power, ground, SDA, or SCL connections for STEMMA QT / Qwiic parts.
+- Set connectorStandard to "stemma-qt" or "qwiic" and busVoltage to "3.3V" for every connection.
+- fromComponentId and toComponentId must exactly match component ids from components.components.
 - Do not drive high-current loads directly from ESP32 GPIO.
 - Add a driver module between the ESP32 and motors, pumps, fans, heaters, solenoids, relays, or LED strips.
-- Treat 5V peripherals as needing level shifting or a compatible driver unless explicitly 3.3V-compatible.
+- Treat non-STEMMA/Qwiic peripherals as unresolved for v1 unless a compatible connectorized catalog module exists.
 - Do not assign exact ESP32 GPIO pins yet.
 - Return only the structured JSON object required by the schema.
 

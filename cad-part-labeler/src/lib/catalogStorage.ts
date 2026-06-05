@@ -29,6 +29,10 @@ export function createCatalogJson(part: CatalogPartDraft) {
   return JSON.stringify(part, null, 2)
 }
 
+export function createCatalogListJson(parts: CatalogPartDraft[]) {
+  return JSON.stringify(parts, null, 2)
+}
+
 export function createPartId(name: string) {
   const slug = name
     .toLowerCase()

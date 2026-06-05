@@ -83,8 +83,12 @@ Rules:
 - Return only the structured JSON object required by the schema.
 - Keep the plan concise enough to review quickly.
 - Prefer catalog parts whenever possible.
-- Prefer ESP32-compatible controller options when embedded control is applicable.
-- Prefer connectorized physical methods such as Grove, Qwiic, STEMMA, or STEMMA QT before breadboards or loose jumpers.
+- Only choose connectorized STEMMA QT / Qwiic parts for v1.
+- Use a 3.3V STEMMA QT / Qwiic bus for every connectorized connection.
+- Never use 5V for a Qwiic-compatible bus.
+- Set connection connectorStandard to "stemma-qt" or "qwiic" and busVoltage to "3.3V".
+- Prefer ESP32-compatible controller options with a STEMMA QT/Qwiic connector when embedded control is applicable.
+- If no connectorized catalog part fits, mark the component unresolved instead of inventing loose wiring.
 - Use driver modules for motors, pumps, fans, heaters, solenoids, relays, and LED strips.
 - Do not drive high-current loads directly from ESP32 GPIO.
 - Do not pretend unresolved parts have CAD assets.

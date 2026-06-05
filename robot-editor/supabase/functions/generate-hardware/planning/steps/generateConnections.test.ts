@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import { buildConnectionsPrompt } from './generateConnections.ts'
 
 describe('buildConnectionsPrompt', () => {
-  test('defines connectorized physical methods with beginner module ecosystems', () => {
+  test('restricts v1 wiring to 3.3V STEMMA QT and Qwiic cables', () => {
     const prompt = buildConnectionsPrompt({
       prompt: 'Build a desk plant monitor.',
       overview: {
@@ -43,9 +43,14 @@ describe('buildConnectionsPrompt', () => {
       },
     })
 
-    expect(prompt).toContain('Grove')
     expect(prompt).toContain('Qwiic')
-    expect(prompt).toContain('STEMMA')
     expect(prompt).toContain('STEMMA QT')
+    expect(prompt).toContain('Only use STEMMA QT / Qwiic connectorized cable connections')
+    expect(prompt).toContain('Use 3.3V for every STEMMA QT / Qwiic bus')
+    expect(prompt).toContain('Never use 5V for a Qwiic-compatible bus')
+    expect(prompt).toContain(
+      'fromComponentId and toComponentId must exactly match component ids',
+    )
+    expect(prompt).not.toContain('Grove')
   })
 })

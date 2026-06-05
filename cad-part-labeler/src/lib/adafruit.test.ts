@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   compareAdafruitParts,
   getPartDedupeKey,
+  isAdafruitCatalogQueuePart,
   isStemmaPart,
   scoreUsefulness,
 } from './adafruit'
@@ -31,20 +32,58 @@ describe('adafruit part sorting', () => {
     expect([outOfStock, inStock].sort(compareAdafruitParts)[0]).toBe(inStock)
   })
 
-  it('keeps only STEMMA parts in the library filter', () => {
+  it('keeps uncataloged Adafruit category 1005 CAD parts in the library filter', () => {
     expect(
-      isStemmaPart(
+      isAdafruitCatalogQueuePart(
         createPart({
-          name: 'STEMMA Soil Sensor',
-          path: '4026 STEMMA Soil Sensor.step',
+          name: '5723 Feather RP2040 USB Host',
+          path: '5723 Feather RP2040 USB Host/5723 Feather RP2040 USB Host.step',
         }),
       ),
     ).toBe(true)
     expect(
-      isStemmaPart(
+      isAdafruitCatalogQueuePart(
         createPart({
           name: 'ESP32 Feather',
           path: '3405 ESP32 Feather.step',
+        }),
+      ),
+    ).toBe(false)
+  })
+
+  it('keeps the CAD-backed ESP32 Feather V2 default controller even when the CAD path omits STEMMA', () => {
+    expect(
+      isStemmaPart(
+        createPart({
+          name: '5400 ESP32 Feather V2',
+          path: '5400 ESP32 Feather V2/5400 ESP32 Feather V2.step',
+        }),
+      ),
+    ).toBe(true)
+  })
+
+  it('removes parts already imported into the robot-editor catalog', () => {
+    expect(
+      isAdafruitCatalogQueuePart(
+        createPart({
+          name: '5400 ESP32 Feather V2',
+          path: '5400 ESP32 Feather V2/5400 ESP32 Feather V2.step',
+        }),
+      ),
+    ).toBe(false)
+    expect(
+      isAdafruitCatalogQueuePart(
+        createPart({
+          name: '5743 Mini Gamepad STEMMA QT',
+          path: '5743 Mini Gamepad STEMMA QT/5743 Mini Gamepad STEMMA QT.step',
+        }),
+      ),
+    ).toBe(false)
+    expect(
+      isAdafruitCatalogQueuePart(
+        createPart({
+          name: 'STEMMA Soil Sensor',
+          path: '4026 STEMMA Soil Sensor.step',
         }),
       ),
     ).toBe(false)

@@ -3,6 +3,7 @@ import {
   isHardwareSpec,
   type HardwareSpec,
 } from './hardwareSpecContract.ts'
+import type { ConnectorStandardId } from './partCatalogContract.ts'
 
 export type ProductOverview = HardwareSpec
 
@@ -50,6 +51,8 @@ export type ConnectionPlan = {
     toPort: string
     interface: string
     physicalMethod: string
+    connectorStandard: ConnectorStandardId
+    busVoltage: '3.3V'
   }>
   powerNotes: string[]
   warnings: string[]
@@ -59,7 +62,7 @@ export type PlanReview = {
   summary: string
   warnings: string[]
   openQuestions: string[]
-  nextSteps: string[]
+  nextSteps?: string[]
 }
 
 export type HardwarePlan = {
@@ -166,6 +169,14 @@ export const connectionPlanSchema = {
           toPort: stringProperty,
           interface: stringProperty,
           physicalMethod: stringProperty,
+          connectorStandard: {
+            type: 'string',
+            enum: ['stemma-qt', 'qwiic'],
+          },
+          busVoltage: {
+            type: 'string',
+            enum: ['3.3V'],
+          },
         },
         required: [
           'id',
@@ -175,6 +186,8 @@ export const connectionPlanSchema = {
           'toPort',
           'interface',
           'physicalMethod',
+          'connectorStandard',
+          'busVoltage',
         ],
       },
     },
@@ -193,7 +206,7 @@ export const planReviewSchema = {
     openQuestions: stringArrayProperty,
     nextSteps: stringArrayProperty,
   },
-  required: ['summary', 'warnings', 'openQuestions', 'nextSteps'],
+  required: ['summary', 'warnings', 'openQuestions'],
 } as const
 
 export const hardwarePlanSchema = {
@@ -269,7 +282,7 @@ export function isPlanReview(value: unknown): value is PlanReview {
     typeof review.summary === 'string' &&
     isStringArray(review.warnings) &&
     isStringArray(review.openQuestions) &&
-    isStringArray(review.nextSteps)
+    (review.nextSteps === undefined || isStringArray(review.nextSteps))
   )
 }
 
@@ -286,6 +299,30 @@ export function isHardwarePlan(value: unknown): value is HardwarePlan {
     isPlanReview(plan.review) &&
     isHardwareSpec(plan.spec)
   )
+}
+
+export function normalizeHardwarePlan(value: unknown): unknown {
+  if (!value || typeof value !== 'object') return value
+
+  const plan = value as Record<string, unknown>
+
+  if (!plan.connections || typeof plan.connections !== 'object') {
+    return value
+  }
+
+  const connections = plan.connections as Record<string, unknown>
+
+  if (!Array.isArray(connections.connections)) {
+    return value
+  }
+
+  return {
+    ...plan,
+    connections: {
+      ...connections,
+      connections: connections.connections.map(normalizeConnection),
+    },
+  }
 }
 
 export function describeHardwarePlanValidationErrors(value: unknown) {
@@ -424,10 +461,43 @@ function isConnection(value: unknown) {
     typeof connection.toComponentId === 'string' &&
     typeof connection.toPort === 'string' &&
     typeof connection.interface === 'string' &&
-    typeof connection.physicalMethod === 'string'
+    typeof connection.physicalMethod === 'string' &&
+    isConnectorStandardId(connection.connectorStandard) &&
+    connection.busVoltage === '3.3V'
   )
+}
+
+function normalizeConnection(value: unknown): unknown {
+  if (!value || typeof value !== 'object') return value
+
+  const connection = value as Record<string, unknown>
+
+  if (
+    isConnectorStandardId(connection.connectorStandard) &&
+    connection.busVoltage === '3.3V'
+  ) {
+    return value
+  }
+
+  return {
+    ...connection,
+    connectorStandard: inferConnectorStandard(connection.physicalMethod),
+    busVoltage: '3.3V',
+  }
 }
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string')
+}
+
+function isConnectorStandardId(value: unknown): value is ConnectorStandardId {
+  return value === 'stemma-qt' || value === 'qwiic'
+}
+
+function inferConnectorStandard(value: unknown): ConnectorStandardId {
+  if (typeof value === 'string' && value.toLowerCase().includes('qwiic')) {
+    return 'qwiic'
+  }
+
+  return 'stemma-qt'
 }

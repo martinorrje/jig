@@ -1,7 +1,10 @@
 import { describe, expect, test } from 'vitest'
 import {
   describeHardwarePlanValidationErrors,
+  isHardwarePlan,
+  isConnectionPlan,
   isComponentSelection,
+  normalizeHardwarePlan,
 } from './hardwarePlanContract.ts'
 
 const baseComponent = {
@@ -108,5 +111,162 @@ describe('isComponentSelection', () => {
         spec: {},
       }),
     ).toContain('components.components[0].partRef is invalid')
+  })
+})
+
+describe('isConnectionPlan', () => {
+  test('accepts 3.3V STEMMA QT / Qwiic connectorized connections', () => {
+    expect(
+      isConnectionPlan({
+        connections: [
+          {
+            id: 'controller-to-sensor',
+            fromComponentId: 'controller',
+            fromPort: 'stemma-qt',
+            toComponentId: 'sensor',
+            toPort: 'stemma-qt',
+            interface: 'i2c',
+            physicalMethod: 'STEMMA QT / Qwiic cable',
+            connectorStandard: 'stemma-qt',
+            busVoltage: '3.3V',
+          },
+        ],
+        powerNotes: [],
+        warnings: [],
+      }),
+    ).toBe(true)
+  })
+
+  test('rejects Qwiic-compatible connections without an explicit 3.3V bus', () => {
+    expect(
+      isConnectionPlan({
+        connections: [
+          {
+            id: 'controller-to-sensor',
+            fromComponentId: 'controller',
+            fromPort: 'stemma-qt',
+            toComponentId: 'sensor',
+            toPort: 'stemma-qt',
+            interface: 'i2c',
+            physicalMethod: 'STEMMA QT / Qwiic cable',
+            connectorStandard: 'qwiic',
+            busVoltage: '5V',
+          },
+        ],
+        powerNotes: [],
+        warnings: [],
+      }),
+    ).toBe(false)
+  })
+})
+
+describe('isHardwarePlan', () => {
+  test('accepts plans without review nextSteps', () => {
+    expect(
+      isHardwarePlan({
+        overview: {
+          title: 'Desk Plant Monitor',
+          summary: 'A compact monitor for a desk plant.',
+          requirements: ['Measure soil moisture.'],
+          constraints: ['Use connectorized parts.'],
+          assumptions: ['The plant is indoors.'],
+          risks: ['Moisture probes can corrode.'],
+        },
+        architecture: { subsystems: [] },
+        components: {
+          components: [
+            {
+              ...baseComponent,
+              partRef: {
+                kind: 'catalog',
+                catalogPartId: '5400-esp32-feather-v2',
+                description: '',
+                reason: '',
+              },
+            },
+          ],
+        },
+        connections: { connections: [], powerNotes: [], warnings: [] },
+        review: {
+          summary: 'Ready for review.',
+          warnings: [],
+          openQuestions: [],
+        },
+        spec: {
+          title: 'Desk Plant Monitor',
+          summary: 'A compact monitor for a desk plant.',
+          requirements: ['Measure soil moisture.'],
+          constraints: ['Use connectorized parts.'],
+          assumptions: ['The plant is indoors.'],
+          risks: ['Moisture probes can corrode.'],
+        },
+      }),
+    ).toBe(true)
+  })
+
+  test('normalizes legacy connections into current connectorized connections', () => {
+    const normalized = normalizeHardwarePlan({
+      overview: {
+        title: 'Desk Plant Monitor',
+        summary: 'A compact monitor for a desk plant.',
+        requirements: ['Measure soil moisture.'],
+        constraints: ['Use connectorized parts.'],
+        assumptions: ['The plant is indoors.'],
+        risks: ['Moisture probes can corrode.'],
+      },
+      architecture: { subsystems: [] },
+      components: {
+        components: [
+          {
+            ...baseComponent,
+            partRef: {
+              kind: 'catalog',
+              catalogPartId: '5400-esp32-feather-v2',
+              description: '',
+              reason: '',
+            },
+          },
+        ],
+      },
+      connections: {
+        connections: [
+          {
+            id: 'controller-to-sensor',
+            fromComponentId: 'controller',
+            fromPort: 'stemma-qt',
+            toComponentId: 'sensor',
+            toPort: 'stemma-qt',
+            interface: 'i2c',
+            physicalMethod: 'STEMMA QT cable',
+          },
+        ],
+        powerNotes: [],
+        warnings: [],
+      },
+      review: {
+        summary: 'Ready for review.',
+        warnings: [],
+        openQuestions: [],
+      },
+      spec: {
+        title: 'Desk Plant Monitor',
+        summary: 'A compact monitor for a desk plant.',
+        requirements: ['Measure soil moisture.'],
+        constraints: ['Use connectorized parts.'],
+        assumptions: ['The plant is indoors.'],
+        risks: ['Moisture probes can corrode.'],
+      },
+    })
+
+    expect(isHardwarePlan(normalized)).toBe(true)
+    const normalizedPlan = normalized as {
+      connections: { connections: Array<Record<string, unknown>> }
+    }
+    expect(normalizedPlan.connections.connections[0]).toEqual(
+      expect.objectContaining({
+        connectorStandard: 'stemma-qt',
+        busVoltage: '3.3V',
+      }),
+    )
   })
 })

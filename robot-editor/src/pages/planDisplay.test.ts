@@ -44,11 +44,13 @@ const plan: HardwarePlan = {
       {
         id: 'esp32-ground',
         fromComponentId: 'esp32',
-        fromPort: 'GND',
+        fromPort: 'stemma-qt',
         toComponentId: 'sensor',
-        toPort: 'GND',
-        interface: 'power',
-        physicalMethod: 'jumper-wire',
+        toPort: 'stemma-qt',
+        interface: 'i2c',
+        physicalMethod: 'STEMMA QT / Qwiic cable',
+        connectorStandard: 'stemma-qt',
+        busVoltage: '3.3V',
       },
     ],
     powerNotes: ['Use a shared ground.'],
@@ -96,7 +98,9 @@ describe('createPlanDisplaySections', () => {
       },
       {
         title: 'Connections',
-        items: ['esp32-ground: esp32.GND -> sensor.GND (power, jumper-wire)'],
+        items: [
+          'esp32-ground: esp32.stemma-qt -> sensor.stemma-qt (i2c, STEMMA QT / Qwiic cable, stemma-qt, 3.3V)',
+        ],
       },
       {
         title: 'Power notes',

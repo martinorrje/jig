@@ -1,4 +1,8 @@
 import type { AdafruitCadFile, CadFormat } from '../types/catalog'
+import {
+  adafruitStemmaCategoryProductIds,
+  robotEditorCatalogProductIds,
+} from './adafruitCategory'
 
 type GitTreeResponse = {
   tree?: Array<{
@@ -57,7 +61,7 @@ export async function fetchAdafruitCadParts(): Promise<AdafruitCadFile[]> {
         usefulnessScore: scoreUsefulness(searchableText),
       }
     })
-    .filter(isStemmaPart)
+    .filter(isAdafruitCatalogQueuePart)
     .reduce(dedupeAdafruitParts, [])
     .sort(compareAdafruitParts)
 }
@@ -140,7 +144,20 @@ export function scoreUsefulness(text: string) {
 }
 
 export function isStemmaPart(part: AdafruitCadFile) {
-  return /stemma/i.test(`${part.name} ${part.path} ${part.productName ?? ''}`)
+  return getPartProductIds(part).some((productId) =>
+    adafruitStemmaCategoryProductIds.has(productId),
+  )
+}
+
+export function isAdafruitCatalogQueuePart(part: AdafruitCadFile) {
+  const productIds = getPartProductIds(part)
+
+  return (
+    productIds.some((productId) =>
+      adafruitStemmaCategoryProductIds.has(productId),
+    ) &&
+    productIds.every((productId) => !robotEditorCatalogProductIds.has(productId))
+  )
 }
 
 export function getPartDedupeKey(part: AdafruitCadFile) {
@@ -170,6 +187,13 @@ function dedupeAdafruitParts(
   }
 
   return parts
+}
+
+function getPartProductIds(part: AdafruitCadFile) {
+  return [part.productId, ...getLikelyProductIds(part.path)].filter(
+    (productId, index, productIds): productId is string =>
+      Boolean(productId) && productIds.indexOf(productId) === index,
+  )
 }
 
 const usefulnessRules = [

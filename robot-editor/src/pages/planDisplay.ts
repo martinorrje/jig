@@ -38,7 +38,7 @@ export function createPlanDisplaySections(
       title: 'Connections',
       items: plan.connections.connections.map(
         (connection) =>
-          `${connection.id}: ${connection.fromComponentId}.${connection.fromPort} -> ${connection.toComponentId}.${connection.toPort} (${connection.interface}, ${connection.physicalMethod})`,
+          `${connection.id}: ${connection.fromComponentId}.${connection.fromPort} -> ${connection.toComponentId}.${connection.toPort} (${connection.interface}, ${connection.physicalMethod}, ${connection.connectorStandard}, ${connection.busVoltage})`,
       ),
     },
     {
@@ -59,7 +59,7 @@ export function createPlanDisplaySections(
     },
     {
       title: 'Next steps',
-      items: plan.review.nextSteps,
+      items: plan.review.nextSteps ?? [],
     },
   ].filter((section) => section.items.length > 0)
 }

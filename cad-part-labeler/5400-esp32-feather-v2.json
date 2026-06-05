@@ -1,0 +1,82 @@
+{
+  "id": "5400-esp32-feather-v2",
+  "name": "5400 ESP32 Feather V2",
+  "source": {
+    "provider": "adafruit",
+    "path": "5400 ESP32 Feather V2/5400 ESP32 Feather V2.step",
+    "format": "step",
+    "url": "https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main/5400%20ESP32%20Feather%20V2/5400%20ESP32%20Feather%20V2.step"
+  },
+  "dimensionsMm": [
+    51.895,
+    22.86,
+    6.37
+  ],
+  "attachmentPoints": [
+    {
+      "id": "attachment-1",
+      "label": "front_left_mount",
+      "kind": "mount",
+      "positionMm": [
+        48.26,
+        20.32,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "notes": "Selected center from #1092; radius 1.27 mm."
+    },
+    {
+      "id": "attachment-2",
+      "label": "front_right_mount",
+      "kind": "mount",
+      "positionMm": [
+        48.26,
+        2.54,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "notes": "Selected center from #1094; radius 1.27 mm."
+    },
+    {
+      "id": "attachment-3",
+      "label": "back_left_mount",
+      "kind": "mount",
+      "positionMm": [
+        2.54,
+        20.32,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "notes": "Selected center from #827; radius 1.25 mm."
+    },
+    {
+      "id": "attachment-4",
+      "label": "back_right_mount",
+      "kind": "mount",
+      "positionMm": [
+        2.54,
+        2.54,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "notes": "Selected center from #1051; radius 1.25 mm."
+    }
+  ],
+  "updatedAt": "2026-06-05T11:39:57.947Z"
+}

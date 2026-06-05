@@ -2,7 +2,10 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import type { HardwarePlan, HardwareSpec } from '../model/types'
 import { isHardwareSpec } from '../../supabase/functions/_shared/hardwareSpecContract'
-import { isHardwarePlan } from '../../supabase/functions/_shared/hardwarePlanContract'
+import {
+  isHardwarePlan,
+  normalizeHardwarePlan,
+} from '../../supabase/functions/_shared/hardwarePlanContract'
 
 export type Project = {
   id: string
@@ -179,7 +182,7 @@ function readLocalProject(projectId: string) {
 
   try {
     const project = JSON.parse(rawProject) as unknown
-    return isProject(project) ? project : null
+    return normalizeStoredProject(project)
   } catch {
     return null
   }
@@ -232,21 +235,42 @@ async function getFunctionErrorMessage(error: Error) {
   return error.message
 }
 
-function isProject(value: unknown): value is Project {
-  if (!value || typeof value !== 'object') return false
+function normalizeStoredProject(value: unknown): Project | null {
+  if (!value || typeof value !== 'object') return null
 
   const project = value as Record<string, unknown>
 
-  return (
+  if (
     typeof project.id === 'string' &&
     typeof project.title === 'string' &&
     typeof project.prompt === 'string' &&
     isHardwareSpec(project.spec) &&
-    (project.plan === undefined || isHardwarePlan(project.plan)) &&
-    (project.cad === undefined || isProjectCadState(project.cad)) &&
     typeof project.createdAt === 'string' &&
     typeof project.updatedAt === 'string'
-  )
+  ) {
+    const normalizedProject: Project = {
+      id: project.id,
+      title: project.title,
+      prompt: project.prompt,
+      spec: project.spec,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+    }
+
+    const normalizedPlan = normalizeHardwarePlan(project.plan)
+
+    if (isHardwarePlan(normalizedPlan)) {
+      normalizedProject.plan = normalizedPlan
+    }
+
+    if (isProjectCadState(project.cad)) {
+      normalizedProject.cad = project.cad
+    }
+
+    return normalizedProject
+  }
+
+  return null
 }
 
 function normalizeCadResult(cad: RawCadResult): ProjectCadState {

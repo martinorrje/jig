@@ -352,6 +352,237 @@
   color: var(--danger);
 }
 
+.connection-diagram {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background: var(--paper);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.connection-diagram-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.connection-diagram-header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.connection-diagram-header p:last-child {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.connection-diagram-stage {
+  position: relative;
+  min-height: clamp(30rem, 52vw, 40rem);
+  overflow: hidden;
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background:
+    linear-gradient(rgba(238, 232, 220, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 232, 220, 0.045) 1px, transparent 1px),
+    var(--paper-muted);
+  background-size: 32px 32px;
+}
+
+.connection-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.connection-line-shadow,
+.connection-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.connection-line-shadow {
+  stroke: rgba(18, 17, 14, 0.92);
+  stroke-width: 11;
+}
+
+.connection-line {
+  stroke: var(--accent);
+  stroke-width: 5;
+}
+
+.connection-terminal {
+  fill: var(--accent);
+  stroke: rgba(18, 17, 14, 0.95);
+  stroke-width: 3;
+}
+
+.connection-line-label {
+  fill: transparent;
+  paint-order: stroke;
+  stroke: transparent;
+  stroke-width: 0;
+  font-size: 0;
+}
+
+.connection-cable-label {
+  position: absolute;
+  z-index: 6;
+  max-width: min(16rem, 42vw);
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(215, 184, 106, 0.5);
+  background: rgba(24, 23, 20, 0.94);
+  color: var(--ink);
+  padding: 0.35rem 0.55rem;
+  box-shadow: 0 0 0 2px rgba(24, 23, 20, 0.72);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  pointer-events: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.connection-node-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+}
+
+.connection-node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  grid-template-rows: 10rem auto;
+  width: min(14.375rem, calc(100vw - 4rem));
+  min-width: 0;
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background: rgba(36, 35, 31, 0.96);
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.connection-node.is-dragging {
+  z-index: 7;
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.28);
+  cursor: grabbing;
+}
+
+.connection-node-image {
+  display: grid;
+  place-items: center;
+  min-height: 10rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--spec-border, #d7d0bf);
+  background: #e9e3d6;
+}
+
+.connection-node-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.9rem;
+}
+
+.connection-node-image span {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid rgba(36, 35, 31, 0.35);
+  color: var(--paper-muted);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.connection-node-copy {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.7rem;
+}
+
+.connection-node-copy h3,
+.connection-node-copy p {
+  margin: 0;
+}
+
+.connection-node-copy h3 {
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.connection-node-copy p,
+.connection-node-copy small,
+.connection-edge-list small {
+  color: var(--ink-muted);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.connection-node-copy p {
+  font-size: 0.8rem;
+}
+
+.connection-node-copy small {
+  font-size: 0.7rem;
+}
+
+.connection-edge-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.connection-diagram-warning {
+  border: 1px solid rgba(215, 184, 106, 0.34);
+  background: rgba(215, 184, 106, 0.12);
+  color: var(--ink);
+  padding: 0.75rem 0.85rem;
+  line-height: 1.5;
+}
+
+.connection-edge-list li {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid var(--spec-border, #d7d0bf);
+  background: var(--paper-muted);
+  padding: 0.7rem 0.85rem;
+}
+
+.connection-edge-list .connection-edge-issue {
+  border-color: rgba(215, 184, 106, 0.36);
+}
+
+.connection-edge-list span {
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .spec-document-header {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--spec-border, #d7d0bf);
@@ -593,6 +824,40 @@
 
   .cad-panel {
     padding: 0.875rem;
+  }
+
+  .connection-diagram {
+    padding: 0.875rem;
+  }
+
+  .connection-diagram-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .connection-diagram-stage {
+    min-height: 34rem;
+  }
+
+  .connection-node-grid {
+    display: block;
+  }
+
+  .connection-node {
+    grid-template-columns: minmax(6.5rem, 32%) 1fr;
+    grid-template-rows: none;
+    width: min(22.5rem, calc(100vw - 4rem));
+  }
+
+  .connection-node-image {
+    min-height: 8.375rem;
+    border-right: 1px solid var(--spec-border, #d7d0bf);
+    border-bottom: 0;
+  }
+
+  .connection-cable-label {
+    max-width: 12rem;
+    font-size: 0.68rem;
   }
 
   .cad-viewer,

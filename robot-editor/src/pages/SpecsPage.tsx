@@ -5,6 +5,7 @@ import {
   PROJECT_UPDATED_EVENT,
   type Project,
 } from '../services/projectService'
+import { ConnectionDiagram } from './ConnectionDiagram'
 import { createPlanDisplaySections } from './planDisplay'
 
 const CadPreview = lazy(async () => ({
@@ -130,6 +131,7 @@ export function SpecsPage() {
         >
           <CadPreview cad={project.cad} />
         </Suspense>
+        {project.plan ? <ConnectionDiagram plan={project.plan} /> : <MissingPlanNotice />}
         <article className="spec-document">
           <header className="spec-document-header">
             <p className="eyebrow">Hardware spec</p>
@@ -182,5 +184,26 @@ export function SpecsPage() {
         </article>
       </section>
     </main>
+  )
+}
+
+function MissingPlanNotice() {
+  return (
+    <section className="connection-diagram" aria-labelledby="missing-plan-title">
+      <header className="connection-diagram-header">
+        <div>
+          <p className="eyebrow">Wiring view</p>
+          <h2 id="missing-plan-title">No connection plan available</h2>
+        </div>
+        <p>
+          This saved spec does not include a valid current hardware plan, so
+          component images and cable lines cannot be drawn yet.
+        </p>
+      </header>
+
+      <div className="connection-diagram-warning" role="status">
+        Generate a new spec with the current planner to get the wiring diagram.
+      </div>
+    </section>
   )
 }

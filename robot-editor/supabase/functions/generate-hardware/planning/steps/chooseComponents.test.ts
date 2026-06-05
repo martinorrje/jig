@@ -28,8 +28,10 @@ describe('buildComponentsPrompt', () => {
     expect(prompt).toContain('partRef.kind to "unresolved"')
     expect(prompt).toContain('catalogPartId as an empty string')
     expect(prompt).toContain(
-      'esp32-devkit-v1: ESP32 DevKit-style development board',
+      '5400-esp32-feather-v2: 5400 ESP32 Feather V2',
     )
-    expect(prompt).toContain('mount-hole-front-left')
+    expect(prompt).toContain('front-left-mount')
+    expect(prompt).toContain('Only choose connectorized STEMMA QT / Qwiic parts for v1')
+    expect(prompt).toContain('3.3V STEMMA QT / Qwiic bus')
   })
 })

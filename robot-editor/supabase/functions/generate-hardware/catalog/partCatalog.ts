@@ -1,18 +1,23 @@
-import type { CatalogPart } from '../../_shared/partCatalogContract.ts'
-import { adafruitMax98357aI2sMonoAmp } from './parts/adafruit_max98357a_i2s_mono_amp/adafruitMax98357aI2sMonoAmp.ts'
+import {
+  connectorStandards,
+  type CatalogPart,
+} from '../../_shared/partCatalogContract.ts'
 import { adafruitStemmaLabelerParts } from './parts/adafruitStemmaLabelerParts.ts'
-import { esp32DevkitV1 } from './parts/esp32_devkit/esp32DevkitV1.ts'
-import { speaker40mm4ohm } from './parts/speaker_40mm_4ohm/speaker40mm4ohm.ts'
 
 export const catalogParts: CatalogPart[] = [
-  esp32DevkitV1,
-  adafruitMax98357aI2sMonoAmp,
-  speaker40mm4ohm,
-  ...adafruitStemmaLabelerParts,
+  ...adafruitStemmaLabelerParts.map(withStemmaQtConnector),
 ]
 
 export function buildCatalogPromptSummary() {
-  return catalogParts
+  return [
+    'Connector standards:',
+    ...Object.values(connectorStandards).map(
+      (standard) =>
+        `${standard.label}: carries ${standard.carries.join(', ')}; nominal ${standard.nominalVoltage}; max bus ${standard.maxBusVoltage}V. ${standard.notes}`,
+    ),
+    'STEMMA QT/Qwiic connector standards use a 3.3V bus by default in v1.',
+    '',
+    ...catalogParts
     .map(
       (part) =>
         [
@@ -20,8 +25,40 @@ export function buildCatalogPromptSummary() {
           `category: ${part.category}`,
           `description: ${part.description}`,
           `attachment points: ${part.attachmentPoints.map((point) => point.id).join(', ')}`,
+          `connectors: ${formatConnectorPorts(part)}`,
           `electrical ports: ${part.electricalPorts.map((port) => port.id).join(', ')}`,
         ].join('\n'),
-    )
-    .join('\n\n')
+    ),
+  ].join('\n\n')
+}
+
+function withStemmaQtConnector(part: CatalogPart): CatalogPart {
+  return {
+    ...part,
+    connectorPorts: [
+      {
+        id: 'stemma-qt',
+        label: 'STEMMA QT',
+        standard: 'stemma-qt',
+        compatibleStandards: ['stemma-qt', 'qwiic'],
+        notes:
+          'Use as a 3.3V STEMMA QT/Qwiic-compatible connectorized I2C cable in v1.',
+      },
+    ],
+  }
+}
+
+function formatConnectorPorts(part: CatalogPart) {
+  if (!part.connectorPorts || part.connectorPorts.length === 0) return 'none'
+
+  return part.connectorPorts
+    .map((port) => {
+      const standard = connectorStandards[port.standard]
+      const compatibleLabels = port.compatibleStandards
+        .map((standardId) => connectorStandards[standardId].label)
+        .join(', ')
+
+      return `${port.id} (${standard.label}, compatible: ${compatibleLabels})`
+    })
+    .join(', ')
 }

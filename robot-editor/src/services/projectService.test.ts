@@ -149,6 +149,107 @@ describe('projectService', () => {
     )
   })
 
+  it('keeps a stored legacy connection plan by adding default connector metadata', async () => {
+    const now = '2026-06-05T00:00:00.000Z'
+    const legacyPlan = {
+      ...plan,
+      connections: {
+        connections: [
+          {
+            id: 'old-connection',
+            fromComponentId: 'esp32',
+            fromPort: 'stemma',
+            toComponentId: 'sensor',
+            toPort: 'stemma',
+            interface: 'i2c',
+            physicalMethod: 'STEMMA QT cable',
+          },
+        ],
+        powerNotes: [],
+        warnings: [],
+      },
+    }
+
+    sessionStorage.setItem(
+      'jig.localProject.old-plan',
+      JSON.stringify({
+        id: 'old-plan',
+        title: spec.title,
+        prompt: 'desktop filament dryer',
+        spec,
+        plan: legacyPlan,
+        cad: { status: 'loading' },
+        createdAt: now,
+        updatedAt: now,
+      }),
+    )
+
+    await expect(loadProject('old-plan')).resolves.toEqual({
+      id: 'old-plan',
+      title: spec.title,
+      prompt: 'desktop filament dryer',
+      spec,
+      plan: {
+        ...legacyPlan,
+        connections: {
+          connections: [
+            {
+              id: 'old-connection',
+              fromComponentId: 'esp32',
+              fromPort: 'stemma',
+              toComponentId: 'sensor',
+              toPort: 'stemma',
+              interface: 'i2c',
+              physicalMethod: 'STEMMA QT cable',
+              connectorStandard: 'stemma-qt',
+              busVoltage: '3.3V',
+            },
+          ],
+          powerNotes: [],
+          warnings: [],
+        },
+      },
+      cad: { status: 'loading' },
+      createdAt: now,
+      updatedAt: now,
+    })
+  })
+
+  it('keeps a stored plan when review nextSteps is absent', async () => {
+    const now = '2026-06-05T00:00:00.000Z'
+    const reviewWithoutNextSteps = { ...plan.review }
+    delete reviewWithoutNextSteps.nextSteps
+    const planWithoutNextSteps = {
+      ...plan,
+      review: reviewWithoutNextSteps,
+    }
+
+    sessionStorage.setItem(
+      'jig.localProject.no-review-next-steps',
+      JSON.stringify({
+        id: 'no-review-next-steps',
+        title: spec.title,
+        prompt: 'desktop filament dryer',
+        spec,
+        plan: planWithoutNextSteps,
+        cad: { status: 'loading' },
+        createdAt: now,
+        updatedAt: now,
+      }),
+    )
+
+    await expect(loadProject('no-review-next-steps')).resolves.toEqual({
+      id: 'no-review-next-steps',
+      title: spec.title,
+      prompt: 'desktop filament dryer',
+      spec,
+      plan: planWithoutNextSteps,
+      cad: { status: 'loading' },
+      createdAt: now,
+      updatedAt: now,
+    })
+  })
+
   it('surfaces edge function response errors', async () => {
     invokeFunction.mockResolvedValue({
       data: null,

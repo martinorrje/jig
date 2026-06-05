@@ -3,6 +3,7 @@ import { CadViewport } from './components/CadViewport'
 import { fetchAdafruitCadParts } from './lib/adafruit'
 import {
   createCatalogJson,
+  createCatalogListJson,
   createPartId,
   loadCatalogParts,
   saveCatalogPart,
@@ -193,22 +194,18 @@ export function App() {
   function downloadCurrentPart() {
     if (!currentCatalogPart) return
 
-    const blob = new Blob([createCatalogJson(currentCatalogPart)], {
-      type: 'application/json',
-    })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${currentCatalogPart.id}.json`
-    link.click()
-    URL.revokeObjectURL(url)
+    downloadJson(createCatalogJson(currentCatalogPart), `${currentCatalogPart.id}.json`)
+  }
+
+  function downloadAllParts() {
+    downloadJson(createCatalogListJson(savedParts), 'cad-catalog-parts.json')
   }
 
   return (
     <main className="app-shell">
       <section className="library-pane" aria-label="Part library">
         <header className="pane-header">
-          <p className="eyebrow">Adafruit STEMMA CAD Parts</p>
+          <p className="eyebrow">Adafruit STEMMA catalog queue</p>
           <h1>CAD Labeler</h1>
         </header>
 
@@ -375,7 +372,16 @@ export function App() {
         </div>
 
         <section className="saved-parts">
-          <p className="eyebrow">Saved locally</p>
+          <div className="saved-parts-header">
+            <p className="eyebrow">Saved locally</p>
+            <button
+              type="button"
+              onClick={downloadAllParts}
+              disabled={savedParts.length === 0}
+            >
+              Export all
+            </button>
+          </div>
           {savedParts.slice(0, 8).map((part) => (
             <div key={part.id} className="saved-part">
               <span>{part.name}</span>
@@ -386,6 +392,18 @@ export function App() {
       </section>
     </main>
   )
+}
+
+function downloadJson(json: string, fileName: string) {
+  const blob = new Blob([json], {
+    type: 'application/json',
+  })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = fileName
+  link.click()
+  URL.revokeObjectURL(url)
 }
 
 function createCatalogPart(

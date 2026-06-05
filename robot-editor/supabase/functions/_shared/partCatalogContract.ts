@@ -1,5 +1,39 @@
 export type Vec3 = [number, number, number]
 
+export type ConnectorSignal = 'power' | 'ground' | 'i2c-sda' | 'i2c-scl'
+
+export type ConnectorStandardId = 'stemma-qt' | 'qwiic'
+
+export type ConnectorStandard = {
+  id: ConnectorStandardId
+  label: string
+  carries: ConnectorSignal[]
+  nominalVoltage: '3.3V'
+  maxBusVoltage: 3.3
+  notes: string
+}
+
+export const connectorStandards = {
+  'stemma-qt': {
+    id: 'stemma-qt',
+    label: 'STEMMA QT',
+    carries: ['power', 'ground', 'i2c-sda', 'i2c-scl'],
+    nominalVoltage: '3.3V',
+    maxBusVoltage: 3.3,
+    notes:
+      'Four-wire connectorized I2C bus. Some STEMMA QT parts may tolerate 5V, but v1 plans use 3.3V for all STEMMA QT/Qwiic buses.',
+  },
+  qwiic: {
+    id: 'qwiic',
+    label: 'Qwiic',
+    carries: ['power', 'ground', 'i2c-sda', 'i2c-scl'],
+    nominalVoltage: '3.3V',
+    maxBusVoltage: 3.3,
+    notes:
+      'Four-wire connectorized I2C bus. Qwiic must not be powered from 5V.',
+  },
+} satisfies Record<ConnectorStandardId, ConnectorStandard>
+
 export type AttachmentPoint = {
   id: string
   label: string
@@ -13,6 +47,14 @@ export type AttachmentPoint = {
   positionMm: Vec3
   normal: Vec3
   diameterMm?: number
+  notes: string
+}
+
+export type ConnectorPort = {
+  id: string
+  label: string
+  standard: ConnectorStandardId
+  compatibleStandards: ConnectorStandardId[]
   notes: string
 }
 
@@ -57,6 +99,7 @@ export type CatalogPart = {
   tags: string[]
   mechanical?: MechanicalMetadata
   attachmentPoints: AttachmentPoint[]
+  connectorPorts?: ConnectorPort[]
   electricalPorts: ElectricalPort[]
 }
 
@@ -74,6 +117,9 @@ export function isCatalogPart(value: unknown): value is CatalogPart {
     (part.mechanical === undefined || isMechanicalMetadata(part.mechanical)) &&
     Array.isArray(part.attachmentPoints) &&
     part.attachmentPoints.every(isAttachmentPoint) &&
+    (part.connectorPorts === undefined ||
+      (Array.isArray(part.connectorPorts) &&
+        part.connectorPorts.every(isConnectorPort))) &&
     Array.isArray(part.electricalPorts) &&
     part.electricalPorts.every(isElectricalPort)
   )
@@ -127,6 +173,21 @@ function isAttachmentPoint(value: unknown) {
   )
 }
 
+function isConnectorPort(value: unknown) {
+  if (!value || typeof value !== 'object') return false
+
+  const port = value as Record<string, unknown>
+
+  return (
+    typeof port.id === 'string' &&
+    typeof port.label === 'string' &&
+    isConnectorStandardId(port.standard) &&
+    Array.isArray(port.compatibleStandards) &&
+    port.compatibleStandards.every(isConnectorStandardId) &&
+    typeof port.notes === 'string'
+  )
+}
+
 function isElectricalPort(value: unknown) {
   if (!value || typeof value !== 'object') return false
 
@@ -139,6 +200,10 @@ function isElectricalPort(value: unknown) {
     typeof port.voltage === 'string' &&
     typeof port.notes === 'string'
   )
+}
+
+function isConnectorStandardId(value: unknown): value is ConnectorStandardId {
+  return value === 'stemma-qt' || value === 'qwiic'
 }
 
 function isVec3(value: unknown): value is Vec3 {
